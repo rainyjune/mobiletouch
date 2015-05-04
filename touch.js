@@ -155,7 +155,6 @@
     var el = event.target || document;
     if (movX > horizontalOffset || movY > verticalOffset) {
       trigger(el, "swipeMy");
-      //alertMy("Movex:" + movX + " movey: " + movY);
       trigger(el, "swipe" + (swipeDirection(touchX, nowX, touchY, nowY)) + "My");
     } else {
       trigger(el, "swipeCancelMy");
