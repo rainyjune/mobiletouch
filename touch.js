@@ -59,11 +59,10 @@
     document.addEventListener("touchcancel", touchendHandler, false);
   } else {
     alertMy("mouse");
-    $(document).on("mousedown", mousestartHandler);
-    $(document).on("mousemove", mousemoveHandler);
-    $(document).on("mouseup", touchendHandler);
-    $(document).on("mouseleave", touchendHandler);
-    
+    document.addEventListener("mousedown", mousestartHandler);
+    document.addEventListener("mousemove", mousemoveHandler);
+    document.addEventListener("mouseup", touchendHandler);
+    document.addEventListener("mouseleave", touchendHandler);
   }
   
   function mousestartHandler(event) {
@@ -79,8 +78,8 @@
     nowPageY = event.pageY;
     tapStart();
     
-    var el = $(event.target) || $(document);
-    el.trigger("swipeStartMy");
+    var el = event.target || document;
+    trigger(el, "swipeStartMy");
   }
   
   function mousemoveHandler(event) {
@@ -94,9 +93,9 @@
     movedPageX = nowPageX - startPageX;
     movedPageY = nowPageY - startPageY;
     
-    var el = $(event.target) || $(document);
+    var el = event.target || document;
     
-    el.trigger("swipeProgressMy", [movedPageX, movedPageY]);
+    trigger(el, "swipeProgressMy", {'movedPageX': movedPageX, 'movedPageY': movedPageY});
   }
   
   function touchstartHandler(event) {
