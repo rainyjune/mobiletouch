@@ -265,30 +265,29 @@
    
   /* Polyfill from https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent */
   (function () {
-    try {
-      new CustomEvent("touch");
-    } catch(e) {
-      function CustomEvent ( event, params ) {
-        params = params || { bubbles: false, cancelable: false, detail: undefined };
-        var evt = document.createEvent( 'CustomEvent' );
+    function CustomEvent ( event, params ) {
+      params = params || { bubbles: true, cancelable: true, detail: undefined };
+      var evt;
+      try{
+        // DOM Level 3 Events support custom event.
+        evt = document.createEvent('CustomEvent');
         evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
-        return evt;
-      }
-
-      CustomEvent.prototype = window.Event.prototype;
-
-      window.CustomEvent = CustomEvent;
-    }    
+      }catch(e) {
+        // DOM Level 2 Events does not support custom event.
+        evt = document.createEvent('Event');
+        evt.initEvent(event, params.bubbles, params.cancelable);
+        evt.detail = params.detail;
+      }      
+      //alertMy("evt:" + evt);
+      return evt;
+    }
+    CustomEvent.prototype = window.Event.prototype;
+    window.CustomEvent = CustomEvent;  
   })();
   
   function trigger(element, eventName, customData) {
     var event;
-    
-    if (customData) {
-      event = new CustomEvent(eventName, {'detail': customData});
-    } else {
-      event = new CustomEvent(eventName);
-    }
+    event = new CustomEvent(eventName, {'detail': customData});
     element.dispatchEvent(event);
   }
   
