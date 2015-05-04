@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Zepto Touch Plugin</title>
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+    <style type="text/css">
+      html, body {
+        -ms-touch-action: none;
+        touch-action: none;
+      }
+      
+      #debug {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        width: 50px;
+        height: 50px;
+        background-color: gray;
+        color: white;
+      }
+      /*
+      #testDiv {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+      }
+      */
+    </style>
+  </head>
+  <body>
+    <div id="testDiv">
+      <p>Texta123</p>
+      <p>Textb</p>
+      <p>Textc</p>
+      <p>Textd</p>
+      <p>Texte</p>
+      <p>Textf</p>
+      <p>Textg</p>
+      <p>Texth</p>
+      <p>Texti</p>
+      <p>Textj</p>
+      <p>Textk</p>
+      <p>Textl</p>
+      <p>Textm</p>
+      <p>Textn</p>
+      <p>Texto</p>
+      <p>Textp</p>
+      <p>Textq</p>
+      <p>Textr</p>
+      <p>Texts</p>
+      <p>Textt</p>
+      <p>Textu</p>
+      <p>Textv</p>
+      <p>Textw</p>
+      <p>Textx</p>
+      <p>Texty</p>
+      <p>Textz</p>
+      <p>Text</p>
+      <p>Text</p>
+      <p>Text</p>
+      <p>Text</p>
+      <p>Text</p>
+      <p>Text</p>
+      <p>Text</p>
+      <p>Text</p>
+      <p>Text</p>
+      <p>Text</p>
+      <p>Text</p>
+      <p>Text</p>
+      <p>Text</p>
+      <p>Text2</p>
+      <p>Text2</p>
+      <p>Text2</p>
+      <p>Text2</p>
+      <p>Text2</p>
+      <p>Text2</p>
+      <p>Text2</p>
+      <p>Text2</p>
+      <p>Text2</p>
+      <p>Text2</p>
+      <p>Text2</p>
+      <p>Text2</p>
+      <p>Text2</p>
+      <p>Text2</p>
+      <p>Text2</p>
+      <p>Text2</p>
+      <p>Text2</p>
+      <p>Text2</p>
+      <p>Text2</p>
+      <p>Text2</p>
+      <p>Text2</p>
+      <p>Text2</p>
+      <p>Text2</p>
+      <p>Text2</p>
+      <p>Text2</p>
+      <p>Text2</p>
+      <p>Text2</p>
+      <p>Text2</p>
+      <p>Text2</p>
+      <p>Text2</p>
+      <p>Text2</p>
+      <p>Text2</p>
+    </div>
+    <!--<script src="http://10.207.26.137:9090/target/target-script-min.js#anonymous"></script>-->
+    <div id="debug">
+      0
+    </div>
+    <script src="touch.js"></script>
+    <script>
+      
+      var tdiv = document.getElementById("testDiv");
+      tdiv.addEventListener("touchstart", function(event){
+        event.preventDefault();
+      })
+      
+      window.onload = function(){
+        var number = 0;
+        //alert("fff");
+        
+        function showNumber(newNumber) {
+          document.querySelector("#debug").innerHTML = newNumber;
+        }
+        
+        var testDiv = document.getElementById("testDiv");
+        testDiv.addEventListener("swipeStartMy", function(e){
+          number = 0;
+          showNumber(number);
+          //alert("swipeStart");
+        });
+        testDiv.addEventListener("swipeLeftMy", function(e){
+          console.log("swipeLeft", e);
+          alert("swipeLeft");
+        });
+        testDiv.addEventListener("swipeRightMy", function(e){
+          //alert("sss");
+           console.log("swipeRight", e);
+          alert("swipeRight");
+        })
+        
+        testDiv.addEventListener("swipeUpMy", function(e){
+          //alert("sss");
+           console.log("swipeUpMy", e);
+          alert("swipeUp");
+        })
+        testDiv.addEventListener("swipeDownMy", function(e){
+          //alert("sss");
+           console.log("swipeDown", e);
+          alert("swipeDown");
+        })
+        
+        testDiv.addEventListener("swipeProgressMy", function(e) {
+          console.log("swipeProgressMy", e);
+          number += 1;
+          showNumber(number);
+        });
+        testDiv.addEventListener("swipeCancelMy", function(e) {
+          alert("swipeCancelMy");
+        });
+      };
+    </script>
+    
+  </body>
+</html>
