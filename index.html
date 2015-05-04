@@ -155,7 +155,8 @@
         testDiv.addEventListener("swipeProgressMy", function(e) {
           console.log("swipeProgressMy", e);
           number += 1;
-          showNumber(number);
+          
+          showNumber("" + number + "," + e.detail.movedPageX);
         });
         testDiv.addEventListener("swipeCancelMy", function(e) {
           alert("swipeCancelMy");
