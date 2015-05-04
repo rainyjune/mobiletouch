@@ -36,14 +36,14 @@
   var horizontalOffset = 20,
       verticalOffset = 30;
       
-  var isDebug = false;
+  var isDebug = true;
   //alertMy("ua:" + navigator.userAgent);
   if (window.PointerEvent) { //For Internet Explorer 11
     alertMy("pinterEvent");
-    $(document).on("pointerdown", pointerDown);
-    $(document).on("pointermove", pointerMove);
-    $(document).on("pointerup", pointerUp);
-    $(document).on("pointercancel", pointerCancel);
+    document.addEventListener("pointerdown", pointerDown);
+    document.addEventListener("pointermove", pointerMove);
+    document.addEventListener("pointerup", pointerUp);
+    document.addEventListener("pointercancel", pointerCancel);
   } else if (window.navigator.msPointerEnabled) { // For Internet Explorer 10
     alertMy("IE 10");
     $(document).on("MSPointerDown", pointerDown);
@@ -189,8 +189,8 @@
     movedPageX = nowPageX - startPageX;
     movedPageY = nowPageY - startPageY;
     
-    var el = $(event.target) || $(document);
-    el.trigger("swipeProgressMy", [movedPageX, movedPageY]);
+    var el = event.target || document;
+    trigger(el, "swipeProgressMy", {'movedPageX': movedPageX, 'movedPageY': movedPageY});
   }
   function pointerUp(event) {
     var isTap = tapEnd(event);
@@ -203,12 +203,12 @@
     
     movX = Math.abs(touchX - nowX);
     movY = Math.abs(touchY - nowY);
-    var el = $(event.target) || $(document);
+    var el = event.target || document;
     if (movX > horizontalOffset || movY > verticalOffset) {
-      el.trigger("swipeMy");
-      el.trigger("swipe" + (swipeDirection(touchX, nowX, touchY, nowY)) + "My");
+      trigger(el, "swipeMy");
+      trigger(el, "swipe" + (swipeDirection(touchX, nowX, touchY, nowY)) + "My");
     } else {
-      el.trigger("swipeCancelMy");
+      trigger(el, "swipeCancelMy");
     }
   }
   function pointerCancel(event) {
@@ -264,9 +264,28 @@
     }
     return false;
   }
+   
+  /* Polyfill from https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent */
+  (function () {
+    try {
+      new CustomEvent("touch");
+    } catch(e) {
+      function CustomEvent ( event, params ) {
+        params = params || { bubbles: false, cancelable: false, detail: undefined };
+        var evt = document.createEvent( 'CustomEvent' );
+        evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+        return evt;
+      }
+
+      CustomEvent.prototype = window.Event.prototype;
+
+      window.CustomEvent = CustomEvent;
+    }    
+  })();
   
   function trigger(element, eventName, customData) {
     var event;
+    
     if (customData) {
       event = new CustomEvent(eventName, {'detail': customData});
     } else {
