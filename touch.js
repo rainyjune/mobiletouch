@@ -52,11 +52,11 @@
     $(document).on("MSPointerCancel", pointerCancel);
   } else if (('ontouchstart' in document.documentElement) || ('ontouchstart' in window)){
     alertMy("normal2")
-    $(document).on("touchstart", touchstartHandler);
-    $(document).on("touchmove", touchmoveHandler);
-    $(document).on("touchend", touchendHandler);
-    $(document).on("touchleave", touchendHandler);
-    $(document).on("touchcancel", touchendHandler);
+    document.addEventListener("touchstart", touchstartHandler, false);
+    document.addEventListener("touchmove", touchmoveHandler, false);
+    document.addEventListener("touchend", touchendHandler, false);
+    document.addEventListener("touchleave", touchendHandler, false);
+    document.addEventListener("touchcancel", touchendHandler, false);
   } else {
     alertMy("mouse");
     $(document).on("mousedown", mousestartHandler);
@@ -112,8 +112,8 @@
     nowPageY = event.touches[0].pageY;
     tapStart();
     
-    var el = $(event.target) || $(document);
-    el.trigger("swipeStartMy");
+    var el = event.target || document;
+    trigger(el, "swipeStartMy");
   }
   
   function touchmoveHandler(event) {
@@ -136,8 +136,8 @@
     }
     
     
-    var el = $(event.target) || $(document); 
-    el.trigger("swipeProgressMy", [movedPageX, movedPageY]);
+    var el = event.target || document; 
+    trigger(el, "swipeProgressMy", {'movedPageX': movedPageX, 'movedPageY': movedPageY});
   }
   
   function touchendHandler(event) {
@@ -153,13 +153,13 @@
     movX = Math.abs(touchX - nowX);
     movY = Math.abs(touchY - nowY);
     
-    var el = $(event.target) || $(document);
+    var el = event.target || document;
     if (movX > horizontalOffset || movY > verticalOffset) {
-      el.trigger("swipeMy");
+      trigger(el, "swipeMy");
       //alertMy("Movex:" + movX + " movey: " + movY);
-      el.trigger("swipe" + (swipeDirection(touchX, nowX, touchY, nowY)) + "My");
+      trigger(el, "swipe" + (swipeDirection(touchX, nowX, touchY, nowY)) + "My");
     } else {
-      el.trigger("swipeCancelMy");
+      trigger(el, "swipeCancelMy");
     }
     initAllVar();
   }
@@ -178,8 +178,8 @@
     nowPageY = event.pageY;
     tapStart();
     
-    var el = $(event.target) || $(document);
-    el.trigger("swipeStartMy");
+    var el = event.target || document;
+    trigger(el, "swipeStartMy");
   }
   function pointerMove(event) {
     nowX = event.clientX;
@@ -256,19 +256,23 @@
   }
   
   function tapEnd(event) {
-    var el = $(event.target) || $(document);
+    var el = event.target || document;
     if (isTapLength && approximatelyEqual(startPageX, nowPageX) && approximatelyEqual(startPageY, nowPageY)) {
       event.preventDefault();
-      el.trigger("tapMy");
+      trigger(el, "tapMy");
       return true;
     }
     return false;
   }
   
-  ['swipeMy', 'swipeLeftMy', 'swipeRightMy', 'swipeUpMy', 'swipeDownMy', 'swipeStartMy', 'swipeCancelMy', 'swipeProgressMy', 'tapMy'].forEach(function(eventName){
-    $.fn[eventName] = function(callback){
-      return this.on(eventName, callback);
-    };
-  });
+  function trigger(element, eventName, customData) {
+    var event;
+    if (customData) {
+      event = new CustomEvent(eventName, {'detail': customData});
+    } else {
+      event = new CustomEvent(eventName);
+    }
+    element.dispatchEvent(event);
+  }
   
 }));
