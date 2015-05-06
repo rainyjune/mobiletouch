@@ -86,15 +86,8 @@
     </div>
     <script src="touch.js"></script>
     <script>
-      
-      var tdiv = document.getElementById("testDiv");
-      tdiv.addEventListener("touchstart", function(event){
-        event.preventDefault();
-      })
-      
       window.onload = function(){
         var number = 0;
-        //alert("fff");
         
         function showNumber(newNumber) {
           document.querySelector("#debug").innerHTML = newNumber;
