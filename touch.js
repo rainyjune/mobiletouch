@@ -2,17 +2,6 @@
  * A standalone touch library for mobile devices.
  * @author rainyjune <rainyjune@live.cn>
  */
-// Note:
-// 1. The touchend event is not trigged on some android stock browsers before 4.1 Jelly Bean.
-//      See: https://code.google.com/p/android/issues/detail?id=19827
-//      The solution: https://code.google.com/p/android/issues/detail?id=19827#c38
-// 2. [IE Bug]pointerup event is fired automatically when pinterdown is held on IE 11 (Windows Phone 8.1)
-//      See: https://connect.microsoft.com/IE/feedback/details/1076515/mouseup-pointerup-events-are-fired-automatically-when-mouse-or-pointerdown-are-held-windows-phone-8-1-ie11
-//      
-// Resources
-// 1. Pointer and gesture events in Internet Explorer 10 (http://msdn.microsoft.com/en-us/library/ie/hh673557(v=vs.85).aspx)
-// 2. Pointer events updates (https://msdn.microsoft.com/en-us/library/ie/dn304886%28v=vs.85%29.aspx)
-// 3. https://github.com/Tyriar/touchtap-event.js
 
 /* global define, Zepto */
 (function(factory){
