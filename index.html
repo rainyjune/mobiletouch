@@ -101,40 +101,40 @@
         }
         
         var testDiv = document.getElementById("testDiv");
-        testDiv.addEventListener("swipeStartMy", function(e){
+        testDiv.addEventListener("swipeStart", function(e){
           number = 0;
           showNumber(number);
           //alert("swipeStart");
         });
-        testDiv.addEventListener("swipeLeftMy", function(e){
+        testDiv.addEventListener("swipeLeft", function(e){
           console.log("swipeLeft", e);
           alert("swipeLeft");
         });
-        testDiv.addEventListener("swipeRightMy", function(e){
+        testDiv.addEventListener("swipeRight", function(e){
           //alert("sss");
            console.log("swipeRight", e);
           alert("swipeRight");
         })
         
-        testDiv.addEventListener("swipeUpMy", function(e){
+        testDiv.addEventListener("swipeUp", function(e){
           //alert("sss");
-           console.log("swipeUpMy", e);
+           console.log("swipeUp", e);
           alert("swipeUp");
         })
-        testDiv.addEventListener("swipeDownMy", function(e){
+        testDiv.addEventListener("swipeDown", function(e){
           //alert("sss");
            console.log("swipeDown", e);
           alert("swipeDown");
         })
         
-        testDiv.addEventListener("swipeProgressMy", function(e) {
-          console.log("swipeProgressMy", e);
+        testDiv.addEventListener("swipeProgress", function(e) {
+          console.log("swipeProgress", e);
           number += 1;
           
           showNumber("" + number + "," + e.detail.movedPageX);
         });
-        testDiv.addEventListener("swipeCancelMy", function(e) {
-          alert("swipeCancelMy");
+        testDiv.addEventListener("swipeCancel", function(e) {
+          alert("swipeCancel");
         });
       };
     </script>
