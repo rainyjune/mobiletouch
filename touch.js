@@ -129,11 +129,9 @@
      * Magic code
      * Use it to make sure the swipeProgressMy event is triggered as expected on some devices, such as Android 2.3.5 and Android 4.4.2
      */
-    
     if (Math.abs(nowX - touchX) > 10 && Math.abs(nowY - touchY) < 25) {
       event.preventDefault();
     }
-    
     
     var el = event.target || document; 
     trigger(el, "swipeProgressMy", {'movedPageX': movedPageX, 'movedPageY': movedPageY});
@@ -277,8 +275,7 @@
         evt = document.createEvent('Event');
         evt.initEvent(event, params.bubbles, params.cancelable);
         evt.detail = params.detail;
-      }      
-      //alertMy("evt:" + evt);
+      }
       return evt;
     }
     CustomEvent.prototype = window.Event.prototype;
