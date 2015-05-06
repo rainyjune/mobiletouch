@@ -36,7 +36,7 @@
   var horizontalOffset = 20,
       verticalOffset = 30;
       
-  var isDebug = true;
+  var isDebug = false;
   //alertMy("ua:" + navigator.userAgent);
   if (window.PointerEvent) { //For Internet Explorer 11
     alertMy("pinterEvent");
