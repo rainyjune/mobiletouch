@@ -79,7 +79,7 @@
     tapStart();
     
     var el = event.target || document;
-    trigger(el, "swipeStartMy");
+    trigger(el, "swipeStart");
   }
   
   function mousemoveHandler(event) {
@@ -95,7 +95,7 @@
     
     var el = event.target || document;
     
-    trigger(el, "swipeProgressMy", {'movedPageX': movedPageX, 'movedPageY': movedPageY});
+    trigger(el, "swipeProgress", {'movedPageX': movedPageX, 'movedPageY': movedPageY});
   }
   
   function touchstartHandler(event) {
@@ -112,7 +112,7 @@
     tapStart();
     
     var el = event.target || document;
-    trigger(el, "swipeStartMy");
+    trigger(el, "swipeStart");
   }
   
   function touchmoveHandler(event) {
@@ -134,7 +134,7 @@
     }
     
     var el = event.target || document; 
-    trigger(el, "swipeProgressMy", {'movedPageX': movedPageX, 'movedPageY': movedPageY});
+    trigger(el, "swipeProgress", {'movedPageX': movedPageX, 'movedPageY': movedPageY});
   }
   
   function touchendHandler(event) {
@@ -152,10 +152,10 @@
     
     var el = event.target || document;
     if (movX > horizontalOffset || movY > verticalOffset) {
-      trigger(el, "swipeMy");
-      trigger(el, "swipe" + (swipeDirection(touchX, nowX, touchY, nowY)) + "My");
+      trigger(el, "swipe");
+      trigger(el, "swipe" + (swipeDirection(touchX, nowX, touchY, nowY)));
     } else {
-      trigger(el, "swipeCancelMy");
+      trigger(el, "swipeCancel");
     }
     initAllVar();
   }
@@ -175,7 +175,7 @@
     tapStart();
     
     var el = event.target || document;
-    trigger(el, "swipeStartMy");
+    trigger(el, "swipeStart");
   }
   function pointerMove(event) {
     nowX = event.clientX;
@@ -186,7 +186,7 @@
     movedPageY = nowPageY - startPageY;
     
     var el = event.target || document;
-    trigger(el, "swipeProgressMy", {'movedPageX': movedPageX, 'movedPageY': movedPageY});
+    trigger(el, "swipeProgress", {'movedPageX': movedPageX, 'movedPageY': movedPageY});
   }
   function pointerUp(event) {
     var isTap = tapEnd(event);
@@ -201,10 +201,10 @@
     movY = Math.abs(touchY - nowY);
     var el = event.target || document;
     if (movX > horizontalOffset || movY > verticalOffset) {
-      trigger(el, "swipeMy");
-      trigger(el, "swipe" + (swipeDirection(touchX, nowX, touchY, nowY)) + "My");
+      trigger(el, "swipe");
+      trigger(el, "swipe" + (swipeDirection(touchX, nowX, touchY, nowY)));
     } else {
-      trigger(el, "swipeCancelMy");
+      trigger(el, "swipeCancel");
     }
   }
   function pointerCancel(event) {
@@ -255,7 +255,7 @@
     var el = event.target || document;
     if (isTapLength && approximatelyEqual(startPageX, nowPageX) && approximatelyEqual(startPageY, nowPageY)) {
       event.preventDefault();
-      trigger(el, "tapMy");
+      trigger(el, "tap");
       return true;
     }
     return false;
