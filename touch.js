@@ -14,6 +14,9 @@
   }
 }(function(){
   
+  // Put all TouchEvent objects fired in the touchstart event into this array.
+  var touchStartTouchList = [];
+  
   /* The coordinates relative to the viewport (clientX, cientY) */
   var touchX = null, touchY = null, nowX = null, nowY = null, movX, movY;
   /* The coordinates relative to the <html> element (pageX, pageY) */
@@ -25,7 +28,7 @@
   var horizontalOffset = 20,
       verticalOffset = 30;
       
-  var isDebug = false;
+  var isDebug = true;
   //alertMy("ua:" + navigator.userAgent);
   if (window.PointerEvent) { //For Internet Explorer 11
     alertMy("pinterEvent");
@@ -40,7 +43,7 @@
     $(document).on("MSPointerUp", pointerUp);
     $(document).on("MSPointerCancel", pointerCancel);
   } else if (('ontouchstart' in document.documentElement) || ('ontouchstart' in window)){
-    alertMy("normal2")
+    //alertMy("normal2")
     document.addEventListener("touchstart", touchstartHandler, false);
     document.addEventListener("touchmove", touchmoveHandler, false);
     document.addEventListener("touchend", touchendHandler, false);
@@ -88,41 +91,28 @@
   }
   
   function touchstartHandler(event) {
-    initAllVar();
-    
-    startPageX = event.touches[0].pageX;
-    startPageY = event.touches[0].pageY;
-    
-    touchX = event.touches[0].clientX;
-    touchY = event.touches[0].clientY;
-    
-    nowPageX = event.touches[0].pageX;
-    nowPageY = event.touches[0].pageY;
+    var touches = event.changedTouches;
+    for (var i = 0, len = touches.length; i < len; i++) {
+      var touchCopy = copyTouch(touches[i]);
+      touchStartTouchList.push(touchCopy);
+    }
     tapStart();
-    
     var el = event.target || document;
     trigger(el, "swipeStart");
   }
   
   function touchmoveHandler(event) {
-    nowPageX = event.touches[0].pageX,
-    nowPageY = event.touches[0].pageY;
-    
-    nowX = event.touches[0].clientX,
-    nowY = event.touches[0].clientY;
-    
-    movedPageX = nowPageX - startPageX;
-    movedPageY = nowPageY - startPageY;
-    
-    /* 
-     * Magic code
-     * Use it to make sure the swipeProgressMy event is triggered as expected on some devices, such as Android 2.3.5 and Android 4.4.2
-     */
-    if (Math.abs(nowX - touchX) > 10 && Math.abs(nowY - touchY) < 25) {
-      event.preventDefault();
+    var touches = event.changedTouches;
+    var firstTouchStartEvent = touchStartTouchList[0];
+    // If there are multiple touch points at a time, we always track the first one.
+    var index = identifiedTouch(firstTouchStartEvent.identifier, touches);
+    if (index === -1) {
+      return false;
     }
-    
+    var touchEvent = touches[index];
     var el = event.target || document; 
+    var movedPageX = touchEvent.pageX - firstTouchStartEvent.pageX;
+    var movedPageY = touchEvent.pageY - firstTouchStartEvent.pageY;
     trigger(el, "swipeProgress", {'movedPageX': movedPageX, 'movedPageY': movedPageY});
   }
   
@@ -131,22 +121,40 @@
     if (isTap) {
       return false;
     }
-    // Why null ?
-    if (nowX === null || nowY === null) {
-      initAllVar();
-      return ;
+    
+    var touches = event.changedTouches;
+    var firstTouchStartEvent = touchStartTouchList[0];
+    
+    for (var i = 0, len = touches.length; i < len; i++) {
+      var idx = identifiedTouch(touches[i].identifier);
+      if (idx >= 0) {
+        touchStartTouchList.splice(idx, 1);
+      }
     }
-    movX = Math.abs(touchX - nowX);
-    movY = Math.abs(touchY - nowY);
+    
+    // If there are multiple touch points at a time, we always track the first one.
+    var index = identifiedTouch(firstTouchStartEvent.identifier, touches);
+    if (index === -1) {
+      return false;
+    }
+    var touchEvent = touches[index];
+    
+    var touchX = firstTouchStartEvent.clientX,
+        nowX = touchEvent.clientX,
+        touchY = firstTouchStartEvent.clientY,
+        nowY = touchEvent.clientY;
+        
+    var movX = Math.abs(touchX - nowX);
+    var movY = Math.abs(touchY - nowY);
     
     var el = event.target || document;
     if (movX > horizontalOffset || movY > verticalOffset) {
       trigger(el, "swipe");
-      trigger(el, "swipe" + (swipeDirection(touchX, nowX, touchY, nowY)));
+      var direction = swipeDirection(touchX, nowX, touchY, nowY);
+      trigger(el, "swipe" + direction);
     } else {
       trigger(el, "swipeCancel");
     }
-    initAllVar();
   }
   
   /* Windows Devices */
@@ -204,22 +212,6 @@
     return Math.abs(x1 - x2) >= Math.abs(y1 - y2) ? (x1 - x2 > 0 ? 'Left' : 'Right') : (y1 - y2 > 0 ? 'Up' : 'Down');
   }
   
-  function initAllVar() {
-    touchX = null,
-    touchY = null,
-    movX = null,
-    movY = null,
-    nowX = null,
-    nowY = null;
-    
-    startPageX = null;
-    startPageY = null;
-    nowPageX = null;
-    nowPageY = null;
-    movedPageX = null;
-    movedPageY = null;
-  }
-  
   function alertMy(string) {
     if (isDebug) {
       alert(string);
@@ -275,6 +267,28 @@
     var event;
     event = new CustomEvent(eventName, {'detail': customData});
     element.dispatchEvent(event);
+  }
+  
+  function copyTouch(touch) {
+    return {
+      "identifier": touch.identifier,
+      "pageX": touch.pageX,
+      "pageY": touch.pageY,
+      "clientX": touch.clientX,
+      "clientY": touch.clientY,
+      "screenX": touch.screenX,
+      "screenY": touch.screenY
+    };
+  }
+  
+  function identifiedTouch(identifier, touchList) {
+    touchList = touchList || touchStartTouchList;
+    for (var i = 0, len = touchList.length; i < len; i++) {
+      if (touchList[i].identifier === identifier) {
+        return i;
+      }
+    }
+    return -1;
   }
   
 }));
