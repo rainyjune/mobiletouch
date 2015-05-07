@@ -9,7 +9,7 @@ window.onload = function(){
   testDiv.addEventListener("swipeStart", function(e){
     number = 0;
     log(number);
-    //alert("swipeStart");
+    log("swipeStart");
   });
   testDiv.addEventListener("swipeLeft", function(e){
     console.log("swipeLeft", e);
