@@ -17,11 +17,6 @@
   // Put all TouchEvent objects fired in the touchstart event into this array.
   var touchStartTouchList = [];
   
-  /* The coordinates relative to the viewport (clientX, cientY) */
-  var touchX = null, touchY = null, nowX = null, nowY = null, movX, movY;
-  /* The coordinates relative to the <html> element (pageX, pageY) */
-  var startPageX, startPageY, nowPageX, nowPageY, movedPageX, movedPageY;
-  
   var isTapLength,
       tapLengthTimeout;
   
