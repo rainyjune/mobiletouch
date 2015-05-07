@@ -134,6 +134,7 @@
       var currentListener = this.elementListeners[i];
       this.element.removeEventListener(currentListener["eventName"], currentListener["callback"]);
     }
+    this.elementListeners.length = 0;
   };
 
   function swipeDirection(x1, x2, y1, y2) {
