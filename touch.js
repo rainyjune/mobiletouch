@@ -48,41 +48,64 @@
     alertMy("mouse");
     document.addEventListener("mousedown", mousestartHandler);
     document.addEventListener("mousemove", mousemoveHandler);
-    document.addEventListener("mouseup", touchendHandler);
-    document.addEventListener("mouseleave", touchendHandler);
+    document.addEventListener("mouseup", mouseEndHandler);
+    document.addEventListener("mouseleave", mouseEndHandler);
   }
   
   function mousestartHandler(event) {
-    initAllVar();
-    
-    startPageX = event.pageX;
-    startPageY = event.pageY;
-    
-    touchX = event.clientX;
-    touchY = event.clientY;
-    
-    nowPageX = event.pageX;
-    nowPageY = event.pageY;
-    tapStart();
+    touchStartTouchList.push({
+      "identifier": 0,
+      "pageX": event.pageX,
+      "pageY": event.pageY,
+      "clientX": event.clientX,
+      "clientY": event.clientY,
+      "screenX": event.screenX,
+      "screenY": event.screenY
+    });
     
     var el = event.target || document;
     trigger(el, "swipeStart");
   }
   
   function mousemoveHandler(event) {
-    if (touchX === null || touchY === null) return ;
-    nowPageX = event.pageX,
-    nowPageY = event.pageY;
+    // The 'touch' event not started.
+    if (touchStartTouchList.length === 0) {
+      return false;
+    }
+    var firstTouchStartEvent = touchStartTouchList[0];
     
-    nowX = event.clientX,
-    nowY = event.clientY;
+    var nowPageX = event.pageX;
+    var nowPageY = event.pageY;
     
-    movedPageX = nowPageX - startPageX;
-    movedPageY = nowPageY - startPageY;
+    var movedPageX = nowPageX - firstTouchStartEvent.pageX;
+    var movedPageY = nowPageY - firstTouchStartEvent.pageY;
     
     var el = event.target || document;
     
     trigger(el, "swipeProgress", {'movedPageX': movedPageX, 'movedPageY': movedPageY});
+  }
+  
+  function mouseEndHandler(event) {
+    var firstTouchStartEvent = touchStartTouchList[0];
+    
+    touchStartTouchList.length = 0;
+    
+    var touchX = firstTouchStartEvent.clientX,
+        nowX = event.clientX,
+        touchY = firstTouchStartEvent.clientY,
+        nowY = event.clientY;
+        
+    var movX = Math.abs(touchX - nowX);
+    var movY = Math.abs(touchY - nowY);
+    
+    var el = event.target || document;
+    if (movX > horizontalOffset || movY > verticalOffset) {
+      trigger(el, "swipe");
+      var direction = swipeDirection(touchX, nowX, touchY, nowY);
+      trigger(el, "swipe" + direction);
+    } else {
+      trigger(el, "swipeCancel");
+    }
   }
   
   function touchstartHandler(event) {
