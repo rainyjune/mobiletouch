@@ -19,8 +19,13 @@
     // Put all TouchEvent objects fired in the touchstart event into this array.
     var touchStartTouchList = [];
     
+    var elementListeners= [];
+    
     this.__defineGetter__("touchStartTouchList", function() {
       return touchStartTouchList;
+    });
+    this.__defineGetter__("elementListeners", function() {
+      return elementListeners;
     });
     
     var isTapLength,
@@ -37,11 +42,31 @@
   TouchObject.prototype.bindEvents = function() {
     var element = this.element;
     
-    element.addEventListener("mousedown", mousestartHandler.bind(this), false);
-    var mousemoveBind = mousemoveHandler.bind(this);
-    element.addEventListener("mousemove", mousemoveBind, false);
-    element.addEventListener("mouseup", mouseEndHandler.bind(this), false);
-    element.addEventListener("mouseleave", mouseEndHandler.bind(this), false);
+    var mouseStartHandlerBind = mousestartHandler.bind(this);
+    var mousemoveHandlerBind = mousemoveHandler.bind(this);
+    var mouseEndHandlerBind = mouseEndHandler.bind(this);
+    
+    element.addEventListener("mousedown", mouseStartHandlerBind, false);
+    element.addEventListener("mousemove", mousemoveHandlerBind, false);
+    element.addEventListener("mouseup", mouseEndHandlerBind, false);
+    element.addEventListener("mouseleave", mouseEndHandlerBind, false);
+    
+    this.elementListeners.push({
+      "eventName": "mousedown",
+      "callback": mouseStartHandlerBind
+    });
+    this.elementListeners.push({
+      "eventName": "mousemove",
+      "callback": mousemoveHandlerBind
+    });
+    this.elementListeners.push({
+      "eventName": "mouseup",
+      "callback": mouseEndHandlerBind
+    });
+    this.elementListeners.push({
+      "eventName": "mouseleave",
+      "callback": mouseEndHandlerBind
+    });
     
     function mousestartHandler(event) {
       this.touchStartTouchList.push({
@@ -72,10 +97,10 @@
         clientX: event.clientX,
         clientY: event.clientY,
         screenX: event.screenX,
-        screenY: event.screenY
+        screenY: event.screenY,
+        detail: {'movedPageX': movedPageX, 'movedPageY': movedPageY}
       };
-      eventObj.detail = {'movedPageX': movedPageX, 'movedPageY': movedPageY};
-      this.trigger("swipeProgress", eventObj );
+      this.trigger("swipeProgress", eventObj);
     }
     
     function mouseEndHandler(event) {
@@ -111,6 +136,13 @@
   TouchObject.prototype.trigger = function(eventName, customData) {
     EventsObject.trigger(eventName, customData);
   }
+  
+  TouchObject.prototype.dispose = function() {
+    for (var i = 0; i < this.elementListeners.length; i ++) {
+      var currentListener = this.elementListeners[i];
+      this.element.removeEventListener(currentListener["eventName"], currentListener["callback"]);
+    }
+  };
   
   window.TouchObject = TouchObject;
 
