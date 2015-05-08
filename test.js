@@ -51,12 +51,12 @@
       console.log("swipeProgress", e);
       number += 1;
       
-      log("" + e.detail.movedPageX + "," + e.detail.movedPageY);
+      log("" + parseInt(e.detail.movedPageX) + "," + parseInt(e.detail.movedPageY));
     });
     divObj.addEventListener("swipeCancel", function(e) {
       log("swipeCancel");
     });
-    
+    /*
     setTimeout(function(){
       divObj.dispose();
       log("dispose");
@@ -65,5 +65,6 @@
         log("Restarted.");
       }, 5000);
     }, 6000);
+    */
   };
 }));
