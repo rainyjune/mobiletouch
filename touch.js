@@ -148,15 +148,64 @@
     }
     
     function pointerMove(event) {
-      
+      // The 'touch' event not started.
+      if (this.touchStartTouchList.length === 0) {
+        return false;
+      }
+      var firstTouchStartEvent = this.touchStartTouchList[0];
+      // We only handle the first touch point.
+      if (firstTouchStartEvent.identifier !== event.pointerId) {
+        return false;
+      }
+      var nowPageX = event.pageX;
+      var nowPageY = event.pageY;
+      var movedPageX = nowPageX - firstTouchStartEvent.pageX;
+      var movedPageY = nowPageY - firstTouchStartEvent.pageY;
+      var eventObj = {
+        pageX: event.pageX,
+        pageY: event.pageY,
+        clientX: event.clientX,
+        clientY: event.clientY,
+        screenX: event.screenX,
+        screenY: event.screenY,
+        detail: {'movedPageX': movedPageX, 'movedPageY': movedPageY}
+      };
+      this.trigger("swipeProgress", eventObj);
     }
     
     function pointerUp(event) {
+      var firstTouchStartEvent = this.touchStartTouchList[0];
+      if (!firstTouchStartEvent) {
+        return false;
+      }
+      var idx = ongoingTouchIndexById(event.pointerId, this.touchStartTouchList);
+      if (idx === -1) {
+        return false;
+      } else if (idx === 0) {
+        
+        var touchX = firstTouchStartEvent.clientX,
+            nowX = event.clientX,
+            touchY = firstTouchStartEvent.clientY,
+            nowY = event.clientY;
+            
+        var movX = Math.abs(touchX - nowX);
+        var movY = Math.abs(touchY - nowY);
+        
+        if (movX > this.horizontalOffset || movY > this.verticalOffset) {
+          this.trigger("swipe", event);
+          var direction = swipeDirection(touchX, nowX, touchY, nowY);
+          this.trigger("swipe" + direction, event);
+        } else {
+          this.trigger("swipeCancel", event);
+        }
       
+      }
+      this.touchStartTouchList.splice(idx, 1);
     }
     
     function pointerCancel(event) {
-      
+      this.touchStartTouchList.length = 0;
+      this.trigger("swipeCancel", event);
     }
     
   };
@@ -201,6 +250,17 @@
 
   function swipeDirection(x1, x2, y1, y2) {
     return Math.abs(x1 - x2) >= Math.abs(y1 - y2) ? (x1 - x2 > 0 ? 'Left' : 'Right') : (y1 - y2 > 0 ? 'Up' : 'Down');
+  }
+  
+  function ongoingTouchIndexById(idToFind, touches) {
+    for (var i=0; i < touches.length; i++) {
+      var id = touches[i].identifier;
+      
+      if (id == idToFind) {
+        return i;
+      }
+    }
+    return -1;    // not found
   }
   
   var EventsObject = (function(){
