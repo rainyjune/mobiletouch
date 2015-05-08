@@ -31,7 +31,7 @@
     this.bindEvents();
   }
   
-  TouchObject.prototype.bindEvents = function() {
+  TouchObject.prototype.bindMouseEvents = function() {
     var element = this.element;
     
     var mouseStartHandlerBind = mousestartHandler.bind(this);
@@ -61,15 +61,8 @@
     });
     
     function mousestartHandler(event) {
-      this.touchStartTouchList.push({
-        "identifier": 0,
-        "pageX": event.pageX,
-        "pageY": event.pageY,
-        "clientX": event.clientX,
-        "clientY": event.clientY,
-        "screenX": event.screenX,
-        "screenY": event.screenY
-      });
+      var touchCopy = this.copyTouch(event);
+      this.touchStartTouchList.push(touchCopy);
       this.trigger("swipeStart", event);
     }
     
@@ -119,6 +112,72 @@
       }
     }
   
+  };
+  
+  TouchObject.prototype.bindPointerEvents = function() {
+    var pointerDownName = window.PointerEvent ? "pointerdown" : "MSPointerDown",
+        pointerMoveName = window.PointerEvent ? "pointermove" : "MSPointerMove",
+        pointerUpName = window.PointerEvent ? "pointerup" : "MSPointerUp",
+        pointerCancelName = window.PointerEvent ? "pointercancel" : "MSPointerCancel";
+    
+    var pointerDownBind = pointerDown.bind(this),
+        pointerMoveBind = pointerMove.bind(this),
+        pointerUpBind = pointerUp.bind(this),
+        pointerCancelBind = pointerCancel.bind(this);
+        
+    var element = this.element,
+        elementListeners = this.elementListeners;
+        
+    element.addEventListener(pointerDownName, pointerDownBind, false);
+    element.addEventListener(pointerMoveName, pointerMoveBind, false);
+    element.addEventListener(pointerUpName, pointerUpBind, false);
+    element.addEventListener(pointerCancelName, pointerCancelBind, false);
+    
+    elementListeners.push({ "eventName": pointerDownName, "callback":  pointerDownBind });
+    elementListeners.push({ "eventName": pointerMoveName, "callback": pointerMoveBind });
+    elementListeners.push({ "eventName": pointerUpName, "callback": pointerUpBind });
+    elementListeners.push({ "eventName": pointerCancelName, "callback": pointerCancelBind });
+    
+    function pointerDown(event) {
+      var touchCopy = this.copyTouch(event);
+      this.touchStartTouchList.push(touchCopy);
+      this.trigger("swipeStart", event);
+    }
+    
+    function pointerMove(event) {
+      
+    }
+    
+    function pointerUp(event) {
+      
+    }
+    
+    function pointerCancel(event) {
+      
+    }
+    
+  };
+  
+  TouchObject.prototype.copyTouch = function(touch) {
+    return {
+      "identifier": touch.identifier || touch.pointerId || 0,
+      "pageX": touch.pageX,
+      "pageY": touch.pageY,
+      "clientX": touch.clientX,
+      "clientY": touch.clientY,
+      "screenX": touch.screenX,
+      "screenY": touch.screenY
+    };
+  };
+  
+  TouchObject.prototype.bindEvents = function() {
+    if (window.PointerEvent || window.navigator.msPointerEnabled) {
+      this.bindPointerEvents();
+    } else if (('ontouchstart' in document.documentElement) || ('ontouchstart' in window)){
+      this.bindTouchEvents();
+    } else {
+      this.bindMouseEvents();
+    }
   };
   
   TouchObject.prototype.addEventListener = function(eventName, callback) {
