@@ -242,11 +242,60 @@
     }
     
     function touchMove(event) {
-      
+      if (this.touchStartTouchList.length === 0) {
+        return false;
+      }
+      var touches = event.changedTouches;
+      var firstTouchStartEvent = this.touchStartTouchList[0];
+      var index = ongoingTouchIndexById(firstTouchStartEvent.identifier, touches);
+      if (index === -1) {
+        return false;
+      }
+      var touchEvent = touches[index];
+      var movedPageX = touchEvent.pageX - firstTouchStartEvent.pageX;
+      var movedPageY = touchEvent.pageY - firstTouchStartEvent.pageY;
+      var eventObj = this.copyTouch(touchEvent);
+      eventObj.detail = {
+        movedPageX: movedPageX,
+        movedPageY: movedPageY
+      };
+      this.trigger("swipeProgress", eventObj);
     }
     
     function touchEnd(event) {
+      var touches = event.changedTouches;
+      var firstTouchStartEvent = this.touchStartTouchList[0];
+      for (var i = 0, len = touches.length; i < len; i++) {
+        var idx = ongoingTouchIndexById(touches[i].identifier, this.touchStartTouchList);
+        if (idx >= 0) {
+          this.touchStartTouchList.splice(idx, 1);
+        }
+      }
       
+      // If there are multiple touch points at a time, we always track the first one.
+      var index = ongoingTouchIndexById(firstTouchStartEvent.identifier, touches);
+      if (index === -1) {
+        return false;
+      }
+    
+      var touchEvent = touches[index];
+    
+      var touchX = firstTouchStartEvent.clientX,
+          nowX = touchEvent.clientX,
+          touchY = firstTouchStartEvent.clientY,
+          nowY = touchEvent.clientY;
+          
+      var movX = Math.abs(touchX - nowX);
+      var movY = Math.abs(touchY - nowY);
+      
+      if (movX > this.horizontalOffset || movY > this.verticalOffset) {
+        this.trigger("swipe", touchEvent);
+        var direction = swipeDirection(touchX, nowX, touchY, nowY);
+        this.trigger("swipe" + direction, touchEvent);
+      } else {
+        this.trigger("swipeCancel", touchEvent);
+      }
+    
     }
     
     function touchLeave(event) {
