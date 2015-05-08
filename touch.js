@@ -210,6 +210,55 @@
     
   };
   
+  TouchObject.prototype.bindTouchEvents = function() {
+    var element = this.element,
+        elementListeners = this.elementListeners;
+        
+    var touchStartBind = touchStart.bind(this),
+        touchMoveBind = touchMove.bind(this),
+        touchEndBind = touchEnd.bind(this),
+        touchLeaveBind = touchLeave.bind(this),
+        touchCancelBind = touchCancel.bind(this);
+        
+    element.addEventListener("touchstart", touchStartBind, false);
+    element.addEventListener("touchmove", touchMoveBind, false);
+    element.addEventListener("touchend", touchEndBind, false);
+    element.addEventListener("touchleave", touchLeaveBind, false);
+    element.addEventListener("touchcancel", touchCancelBind, false);
+    
+    elementListeners.push({ "eventName": "touchstart", "callback": touchStartBind });
+    elementListeners.push({ "eventName": "touchmove", "callback": touchMoveBind });
+    elementListeners.push({ "eventName": "touchend", "callback": touchEndBind });
+    elementListeners.push({ "eventName": "touchleave", "callback": touchLeaveBind });
+    elementListeners.push({ "eventName": "touchcancel", "callback": touchCancelBind });
+    
+    function touchStart(event) {
+      var touches = event.changedTouches;
+      for (var i = 0; i < touches.length; i++) {
+        var touchCopy = this.copyTouch(touches[i]);
+        this.touchStartTouchList.push(touchCopy);
+      }
+      this.trigger("swipeStart", event);
+    }
+    
+    function touchMove(event) {
+      
+    }
+    
+    function touchEnd(event) {
+      
+    }
+    
+    function touchLeave(event) {
+      
+    }
+    
+    function touchCancel(event) {
+      
+    }
+    
+  };
+  
   TouchObject.prototype.copyTouch = function(touch) {
     return {
       "identifier": touch.identifier || touch.pointerId || 0,
