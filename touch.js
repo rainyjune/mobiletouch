@@ -139,6 +139,9 @@
     elementListeners.push({ "eventName": pointerCancelName, "callback": pointerCancelBind });
     
     function pointerDown(event) {
+      // event.changedTouches is undefined in IE 11.
+      // If there are several touch points at the same time, each of them will fire 
+      // the pointerdown event individually.
       var touchCopy = this.copyTouch(event);
       this.touchStartTouchList.push(touchCopy);
       this.trigger("swipeStart", event);
