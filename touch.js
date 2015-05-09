@@ -26,7 +26,7 @@
     this.horizontalOffset = 20,
     this.verticalOffset = 30;
     
-    this.isDebug = true;
+    this.isDebug = false;
     
     this.bindEvents();
   }
