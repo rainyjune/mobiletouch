@@ -35,9 +35,12 @@
   TouchObject.prototype.applyCSS = function() {
     var element = this.element;
     
+    // Disable default touch action, such as 
+    // scrolling, pinch-zooming or double-tap-zooming.
     element.style.msTouchAction = "none";
     element.style.touchAction = "none";
     
+    // Prevent text selection
     element.style.webkitUserSelect = "none";
     element.style.mozUserSelect = "none";
     element.style.msUserSelect = "none";
