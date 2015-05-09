@@ -336,7 +336,7 @@
   };
   
   TouchObject.prototype.bindEvents = function() {
-    if (typeof MSGesture === "function") {
+    if (window.MSGesture) {
       this.bindGestureEvents();
     } else if (window.PointerEvent || window.navigator.msPointerEnabled) {
       this.bindPointerEvents();
