@@ -28,8 +28,20 @@
     
     this.isDebug = false;
     
+    this.applyCSS();
     this.bindEvents();
   }
+  
+  TouchObject.prototype.applyCSS = function() {
+    var element = this.element;
+    
+    element.style.msTouchAction = "none";
+    element.style.touchAction = "none";
+    
+    element.style.webkitUserSelect = "none";
+    element.style.mozUserSelect = "none";
+    element.style.msUserSelect = "none";
+  };
   
   TouchObject.prototype.bindMouseEvents = function() {
     var element = this.element;
