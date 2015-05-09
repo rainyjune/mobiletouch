@@ -336,13 +336,104 @@
   };
   
   TouchObject.prototype.bindEvents = function() {
-    if (window.PointerEvent || window.navigator.msPointerEnabled) {
+    if (typeof MSGesture === "function") {
+      this.bindGestureEvents();
+    } else if (window.PointerEvent || window.navigator.msPointerEnabled) {
       this.bindPointerEvents();
     } else if (('ontouchstart' in document.documentElement) || ('ontouchstart' in window)){
       this.bindTouchEvents();
     } else {
       this.bindMouseEvents();
     }
+  };
+  
+  TouchObject.prototype.bindGestureEvents = function() {
+    var element = this.element;
+    // MSGesture object https://msdn.microsoft.com/en-us/library/hh968249%28v=vs.85%29.aspx
+    var myGesture = new MSGesture();
+    
+    myGesture.target = element;
+    var pointerId;
+    
+    var guestureStartBind = guestureStart.bind(this),
+        gestureChangeBind = gestureChange.bind(this),
+        gestureEndBind = gestureEnd.bind(this),
+        handlePointerDown = function(event) {
+          event.target.setPointerCapture(event.pointerId);
+          pointerId = event.pointerId;
+          myGesture.addPointer(event.pointerId);
+          window.myGesture = myGesture;
+          console.log("myGesture:", myGesture);
+        };
+        
+    element.addEventListener("MSGestureStart", guestureStartBind, false);
+    element.addEventListener("MSGestureChange", gestureChangeBind, false);
+    element.addEventListener("MSGestureEnd", gestureEndBind, false);
+    element.addEventListener("pointerdown", handlePointerDown, false);
+    
+    function guestureStart(event) {
+      console.log("guest start event", event)
+      var touchCopy = this.copyTouch(event);
+      touchCopy.identifier = pointerId;
+      
+      this.touchStartTouchList.push(touchCopy);
+      this.trigger("swipeStart", event);
+    }
+    
+    function gestureChange(event) {
+       if (event.detail == event.MSGESTURE_FLAG_INERTIA) {
+         return false;
+       }
+      console.log("gesture change:", event);
+      // The 'touch' event not started.
+      if (this.touchStartTouchList.length === 0) {
+        return false;
+      }
+      var firstTouchStartEvent = this.touchStartTouchList[0];
+      // We only handle the first touch point.
+      var nowClientX = event.clientX,
+          nowClientY = event.clientY,
+          movedClientX = nowClientX - firstTouchStartEvent.clientX,
+          movedClientY = nowClientY - firstTouchStartEvent.clientY;
+          
+      var eventObj = {
+        pageX: event.pageX, // undefined
+        pageY: event.pageY, // undefined
+        clientX: nowClientX,
+        clientY: nowClientY,
+        screenX: event.screenX,
+        screenY: event.screenY,
+        detail: {'movedPageX':  movedClientX, 'movedPageY': movedClientY}
+      };
+      this.trigger("swipeProgress", eventObj);
+    }
+    
+    function gestureEnd(event) {
+      var firstTouchStartEvent = this.touchStartTouchList[0];
+      if (!firstTouchStartEvent) {
+        return false;
+      }
+
+      var touchX = firstTouchStartEvent.clientX,
+          nowX = event.clientX,
+          touchY = firstTouchStartEvent.clientY,
+          nowY = event.clientY;
+          
+      var movX = Math.abs(touchX - nowX);
+      var movY = Math.abs(touchY - nowY);
+      
+      if (movX > this.horizontalOffset || movY > this.verticalOffset) {
+        this.trigger("swipe", event);
+        var direction = swipeDirection(touchX, nowX, touchY, nowY);
+        this.trigger("swipe" + direction, event);
+      } else {
+        this.trigger("swipeCancel", event);
+      }
+      this.touchStartTouchList.length = 0;
+      
+    }
+    
+    
   };
   
   TouchObject.prototype.addEventListener = function(eventName, callback) {
