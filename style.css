@@ -2,14 +2,15 @@
   position: fixed;
   right: 0;
   bottom: 0;
-  width: 220px;
-  height: 100px;
+  width: 230px;
+  height: 150px;
   background-color: gray;
   color: white;
 }
 
 #debug table {
   width: 100%;
+  font-size: 12px;
 }
 
 #debug td:first-child {

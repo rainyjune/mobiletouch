@@ -16,8 +16,7 @@
     
     divObj.addEventListener("swipeStart", function(e){
       document.querySelector("#evtName").innerHTML = "swipeStart";
-      document.querySelector("#movedX").innerHTML = "&nbsp;";
-      document.querySelector("#movedY").innerHTML = "&nbsp;";
+      printEvent(e);
     });
     divObj.addEventListener("swipeLeft", function(e){
       document.querySelector("#evtName").innerHTML = "swipeLeft";
@@ -35,12 +34,23 @@
     
     divObj.addEventListener("swipeProgress", function(e) {
       document.querySelector("#evtName").innerHTML = "swipeProgress";
-      document.querySelector("#movedX").innerHTML = parseInt(e.detail.movedPageX) + "px";
-      document.querySelector("#movedY").innerHTML = parseInt(e.detail.movedPageY) + "px";
+      printEvent(e);
     });
     divObj.addEventListener("swipeCancel", function(e) {
       document.querySelector("#evtName").innerHTML = "swipeCancel";
     });
+    
+    divObj.addEventListener("tap", function(e) {
+      document.querySelector("#evtName").innerHTML = "tap";
+      printEvent(e);
+    });
+    
+    function printEvent(event) {
+      document.querySelector("#movedX").innerHTML = (event.detail && typeof event.detail.movedPageX !== "undefined") ? parseInt(event.detail.movedPageX) + "px" : "&nbsp;";
+      document.querySelector("#movedY").innerHTML = (event.detail && typeof event.detail.movedPageY !== "undefined") ? parseInt(event.detail.movedPageY) + "px" : "&nbsp;";
+      document.querySelector("#clientX").innerHTML = (typeof event.clientX !== "undefined") ? parseInt(event.clientX) + "px" : "&nbsp;";
+      document.querySelector("#clientY").innerHTML = (typeof event.clientY !== "undefined") ? parseInt(event.clientY) + "px" : "&nbsp;";
+    }
     /*
     setTimeout(function(){
       divObj.dispose();
