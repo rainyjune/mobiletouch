@@ -473,6 +473,11 @@
     
   };
   
+  /**
+   * Add event listener for the DOM element user specified.
+   * @param {string} eventName - A string representing the event type to listen for.
+   * @param {function} callback - The function receives a notification when an event of the specified type occurs.
+   */
   TouchObject.prototype.addEventListener = function(eventName, callback) {
     EventsObject.on(eventName, callback);
   }
