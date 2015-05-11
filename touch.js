@@ -396,9 +396,11 @@
     }
     
     function gestureChange(event) {
-       if (event.detail == event.MSGESTURE_FLAG_INERTIA) {
-         return false;
-       }
+      // Trigger gestureEnd handler immediately if a gesture is in its inertia phase.
+      if (event.detail == event.MSGESTURE_FLAG_INERTIA) {
+        gestureEndBind(event);
+        return false;
+      }
       console.log("gesture change:", event);
       // The 'touch' event not started.
       if (this.touchStartTouchList.length === 0) {
