@@ -74,7 +74,7 @@
     // Disable default touch action, such as 
     // scrolling, pinch-zooming or double-tap-zooming.
     element.style.msTouchAction = "none";
-    element.style.touchAction = "none";
+    //element.style.touchAction = "none";
     
     // Prevent text selection
     element.style.webkitUserSelect = "none";
