@@ -1,20 +1,29 @@
 /***
  * A standalone touch library for mobile devices.
  * @author rainyjune <rainyjune@live.cn>
+ * @license MIT
  */
 
 /* global define, Zepto */
 ((function(){
-  
+  /**
+   * Represents a touchable object.
+   * @constructor
+   * @param {DOM} domElement - A DOM element.
+   */
   function TouchObject(domElement) {
     this.element = domElement;
     // Put all TouchEvent objects fired in the touchstart event into this array.
+    /** @access protected */
     var touchStartTouchList = [];
     
+    /** @access protected */
     var elementListeners= [];
     
+    /** @access protected */
     var touchType;
     
+    /** @access protected */
     var isTouchFixedNeeded = (function(){
       if (isAndroidBrowser()) {
         var androidVersion = getAndroidVersion();
@@ -59,7 +68,10 @@
     var isTapLength,
         tapLengthTimeout;
     
+    /** @access public */
     this.horizontalOffset = 20,
+    
+    /** @access public */
     this.verticalOffset = 30;
     
     this.isDebug = false;
