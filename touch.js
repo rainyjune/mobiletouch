@@ -13,6 +13,17 @@
     
     var elementListeners= [];
     
+    var touchType;
+    
+    this.__defineGetter__("touchType", function(){
+      return touchType;
+    });
+    this.__defineSetter__("touchType", function(type){
+      var touchTypes = ["gesture", "pointer", "touch", "mouse"];
+      if (touchTypes.indexOf(type) > -1) {
+        touchType = type;
+      }
+    });
     this.__defineGetter__("touchStartTouchList", function() {
       return touchStartTouchList;
     });
@@ -337,12 +348,16 @@
   
   TouchObject.prototype.bindEvents = function() {
     if (window.MSGesture) {
+      this.touchType = "gesture";
       this.bindGestureEvents();
     } else if (window.PointerEvent || window.navigator.msPointerEnabled) {
+      this.touchType = "pointer";
       this.bindPointerEvents();
     } else if (('ontouchstart' in document.documentElement) || ('ontouchstart' in window)){
+      this.touchType = "touch";
       this.bindTouchEvents();
     } else {
+      this.touchType = "mouse";
       this.bindMouseEvents();
     }
   };
