@@ -15,6 +15,21 @@
     
     var touchType;
     
+    var isTouchFixedNeeded = (function(){
+      if (isAndroidBrowser()) {
+        var androidVersion = getAndroidVersion();
+        if (androidVersion === "4.0" || androidVersion === "4.4") {
+          return true;
+        } else {
+          return false;
+        }
+      }
+      return false;
+    })();
+    
+    this.__defineGetter__("isTouchFixedNeeded", function() {
+      return isTouchFixedNeeded;
+    });
     this.__defineGetter__("touchType", function(){
       return touchType;
     });
@@ -241,6 +256,9 @@
     this.addAppListener("touchcancel", touchCancelBind);
     
     function touchStart(event) {
+      if (this.isTouchFixedNeeded) {
+        event.preventDefault();
+      }
       var touches = event.changedTouches;
       for (var i = 0; i < touches.length; i++) {
         var touchCopy = this.copyTouch(touches[i]);
@@ -465,6 +483,23 @@
       }
     }
     return -1;    // not found
+  }
+  
+  function isAndroidBrowser() {
+    var ua = navigator.userAgent;
+    // The user agent string of IE mobile v11 on Windows Phone 8.1 contains "Android"
+    if (ua.match(/MSIE|Trident/)) {
+      return false;
+    }
+    return (ua.indexOf("Android") >= 0) || (ua.indexOf("android") >= 0);
+  }
+  
+   /**
+   * Get 2 digit version of Android
+   */
+  function getAndroidVersion() {
+    var ua = navigator.userAgent;
+    return parseFloat(ua.slice(ua.indexOf("Android")+8)).toFixed(1);
   }
   
   var EventsObject = (function(){
