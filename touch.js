@@ -397,7 +397,7 @@
     
     function gestureChange(event) {
       // Trigger gestureEnd handler immediately if a gesture is in its inertia phase.
-      if (event.detail == event.MSGESTURE_FLAG_INERTIA) {
+      if (event.detail === event.MSGESTURE_FLAG_INERTIA) {
         gestureEndBind(event);
         return false;
       }
