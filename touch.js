@@ -377,8 +377,6 @@
           event.target.setPointerCapture(event.pointerId);
           pointerId = event.pointerId;
           myGesture.addPointer(event.pointerId);
-          window.myGesture = myGesture;
-          console.log("myGesture:", myGesture);
         };
         
     element.addEventListener("MSGestureStart", guestureStartBind, false);
@@ -387,7 +385,6 @@
     element.addEventListener("pointerdown", handlePointerDown, false);
     
     function guestureStart(event) {
-      console.log("guest start event", event)
       var touchCopy = this.copyTouch(event);
       touchCopy.identifier = pointerId;
       
@@ -401,7 +398,6 @@
         gestureEndBind(event);
         return false;
       }
-      console.log("gesture change:", event);
       // The 'touch' event not started.
       if (this.touchStartTouchList.length === 0) {
         return false;
