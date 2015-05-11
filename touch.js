@@ -31,6 +31,16 @@
       return elementListeners;
     });
     
+    this.__defineGetter__("addAppListener", function() {
+      return function(type, listener) {
+        this.element.addEventListener(type, listener, false);
+        this.elementListeners.push({
+          "eventName": type,
+          "callback": listener
+        });
+      };
+    });
+    
     var isTapLength,
         tapLengthTimeout;
     
@@ -64,27 +74,10 @@
     var mousemoveHandlerBind = mousemoveHandler.bind(this);
     var mouseEndHandlerBind = mouseEndHandler.bind(this);
     
-    element.addEventListener("mousedown", mouseStartHandlerBind, false);
-    element.addEventListener("mousemove", mousemoveHandlerBind, false);
-    element.addEventListener("mouseup", mouseEndHandlerBind, false);
-    element.addEventListener("mouseleave", mouseEndHandlerBind, false);
-    
-    this.elementListeners.push({
-      "eventName": "mousedown",
-      "callback": mouseStartHandlerBind
-    });
-    this.elementListeners.push({
-      "eventName": "mousemove",
-      "callback": mousemoveHandlerBind
-    });
-    this.elementListeners.push({
-      "eventName": "mouseup",
-      "callback": mouseEndHandlerBind
-    });
-    this.elementListeners.push({
-      "eventName": "mouseleave",
-      "callback": mouseEndHandlerBind
-    });
+    this.addAppListener("mousedown", mouseStartHandlerBind);
+    this.addAppListener("mousemove", mousemoveHandlerBind);
+    this.addAppListener("mouseup", mouseEndHandlerBind);
+    this.addAppListener("mouseleave", mouseEndHandlerBind);
     
     function mousestartHandler(event) {
       var touchCopy = this.copyTouch(event);
@@ -154,15 +147,10 @@
     var element = this.element,
         elementListeners = this.elementListeners;
         
-    element.addEventListener(pointerDownName, pointerDownBind, false);
-    element.addEventListener(pointerMoveName, pointerMoveBind, false);
-    element.addEventListener(pointerUpName, pointerUpBind, false);
-    element.addEventListener(pointerCancelName, pointerCancelBind, false);
-    
-    elementListeners.push({ "eventName": pointerDownName, "callback":  pointerDownBind });
-    elementListeners.push({ "eventName": pointerMoveName, "callback": pointerMoveBind });
-    elementListeners.push({ "eventName": pointerUpName, "callback": pointerUpBind });
-    elementListeners.push({ "eventName": pointerCancelName, "callback": pointerCancelBind });
+    this.addAppListener(pointerDownName, pointerDownBind);
+    this.addAppListener(pointerMoveName, pointerMoveBind);
+    this.addAppListener(pointerUpName, pointerUpBind);
+    this.addAppListener(pointerCancelName, pointerCancelBind);
     
     function pointerDown(event) {
       // event.changedTouches is undefined in IE 11.
@@ -246,17 +234,11 @@
         touchLeaveBind = touchLeave.bind(this),
         touchCancelBind = touchCancel.bind(this);
         
-    element.addEventListener("touchstart", touchStartBind, false);
-    element.addEventListener("touchmove", touchMoveBind, false);
-    element.addEventListener("touchend", touchEndBind, false);
-    element.addEventListener("touchleave", touchLeaveBind, false);
-    element.addEventListener("touchcancel", touchCancelBind, false);
-    
-    elementListeners.push({ "eventName": "touchstart", "callback": touchStartBind });
-    elementListeners.push({ "eventName": "touchmove", "callback": touchMoveBind });
-    elementListeners.push({ "eventName": "touchend", "callback": touchEndBind });
-    elementListeners.push({ "eventName": "touchleave", "callback": touchLeaveBind });
-    elementListeners.push({ "eventName": "touchcancel", "callback": touchCancelBind });
+    this.addAppListener("touchstart", touchStartBind);
+    this.addAppListener("touchmove", touchMoveBind);
+    this.addAppListener("touchend", touchEndBind);
+    this.addAppListener("touchleave", touchLeaveBind);
+    this.addAppListener("touchcancel", touchCancelBind);
     
     function touchStart(event) {
       var touches = event.changedTouches;
@@ -350,8 +332,7 @@
     var contextmenuHandler = function(event) {
       event.preventDefault();
     };
-    this.element.addEventListener("contextmenu", contextmenuHandler, false);
-    this.elementListeners.push({ "eventName": "contextmenu", "callback": contextmenuHandler });
+    this.addAppListener("contextmenu", contextmenuHandler);
     
     if (window.MSGesture) {
       this.touchType = "gesture";
@@ -384,11 +365,11 @@
           pointerId = event.pointerId;
           myGesture.addPointer(event.pointerId);
         };
-        
-    element.addEventListener("MSGestureStart", guestureStartBind, false);
-    element.addEventListener("MSGestureChange", gestureChangeBind, false);
-    element.addEventListener("MSGestureEnd", gestureEndBind, false);
-    element.addEventListener("pointerdown", handlePointerDown, false);
+    
+    this.addAppListener("MSGestureStart", guestureStartBind);
+    this.addAppListener("MSGestureChange", gestureChangeBind);
+    this.addAppListener("MSGestureEnd", gestureEndBind);
+    this.addAppListener("pointerdown", handlePointerDown);
     
     function guestureStart(event) {
       var touchCopy = this.copyTouch(event);
