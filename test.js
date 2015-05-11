@@ -10,51 +10,36 @@
 }(function(TouchObject){
   
   window.onload = function(){
-    var number = 0;
-    
-    function log(msg) {
-      document.querySelector("#debug").innerHTML = msg;
-    }
-    window.log = log;
-    
     var testDiv = document.getElementById("testDiv");
-    
     var divObj = new TouchObject(testDiv);
+    document.querySelector("#touchType").innerHTML = divObj.touchType;
     
     divObj.addEventListener("swipeStart", function(e){
-      number = 0;
-      log(number);
-      log("swipeStart");
+      document.querySelector("#evtName").innerHTML = "swipeStart";
+      document.querySelector("#movedX").innerHTML = "&nbsp;";
+      document.querySelector("#movedY").innerHTML = "&nbsp;";
     });
     divObj.addEventListener("swipeLeft", function(e){
-      console.log("swipeLeft", e);
-      log("swipeLeft");
+      document.querySelector("#evtName").innerHTML = "swipeLeft";
     });
     divObj.addEventListener("swipeRight", function(e){
-      //alert("sss");
-       console.log("swipeRight", e);
-      log("swipeRight");
+      document.querySelector("#evtName").innerHTML = "swipeRight";
     })
     
     divObj.addEventListener("swipeUp", function(e){
-      //alert("sss");
-       console.log("swipeUp", e);
-      log("swipeUp");
+      document.querySelector("#evtName").innerHTML = "swipeUp";
     })
     divObj.addEventListener("swipeDown", function(e){
-      //alert("sss");
-       console.log("swipeDown", e);
-      log("swipeDown");
+      document.querySelector("#evtName").innerHTML = "swipeDown";
     })
     
     divObj.addEventListener("swipeProgress", function(e) {
-      console.log("swipeProgress", e);
-      number += 1;
-      
-      log("" + parseInt(e.detail.movedPageX) + "," + parseInt(e.detail.movedPageY));
+      document.querySelector("#evtName").innerHTML = "swipeProgress";
+      document.querySelector("#movedX").innerHTML = parseInt(e.detail.movedPageX) + "px";
+      document.querySelector("#movedY").innerHTML = parseInt(e.detail.movedPageY) + "px";
     });
     divObj.addEventListener("swipeCancel", function(e) {
-      log("swipeCancel");
+      document.querySelector("#evtName").innerHTML = "swipeCancel";
     });
     /*
     setTimeout(function(){

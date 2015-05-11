@@ -2,10 +2,22 @@
   position: fixed;
   right: 0;
   bottom: 0;
-  width: 100px;
-  height: 50px;
+  width: 220px;
+  height: 100px;
   background-color: gray;
   color: white;
+}
+
+#debug table {
+  width: 100%;
+}
+
+#debug td:first-child {
+  font-weight: bold;
+}
+
+#debug td:last-child {
+  text-align: right;
 }
 /*
 #testDiv {
