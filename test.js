@@ -38,6 +38,7 @@
     });
     divObj.addEventListener("swipeCancel", function(e) {
       document.querySelector("#evtName").innerHTML = "swipeCancel";
+      printEvent(e);
     });
     
     divObj.addEventListener("tap", function(e) {
