@@ -53,7 +53,7 @@
     
     // Prevent text selection
     element.style.webkitUserSelect = "none";
-    element.style.mozUserSelect = "none";
+    element.style.MozUserSelect = "none";
     element.style.msUserSelect = "none";
   };
   
