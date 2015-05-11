@@ -347,6 +347,12 @@
   };
   
   TouchObject.prototype.bindEvents = function() {
+    var contextmenuHandler = function(event) {
+      event.preventDefault();
+    };
+    this.element.addEventListener("contextmenu", contextmenuHandler, false);
+    this.elementListeners.push({ "eventName": "contextmenu", "callback": contextmenuHandler });
+    
     if (window.MSGesture) {
       this.touchType = "gesture";
       this.bindGestureEvents();
