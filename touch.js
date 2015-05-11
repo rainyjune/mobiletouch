@@ -378,6 +378,7 @@
     var guestureStartBind = guestureStart.bind(this),
         gestureChangeBind = gestureChange.bind(this),
         gestureEndBind = gestureEnd.bind(this),
+        tapHandlerBind = tapHandler.bind(this),
         handlePointerDown = function(event) {
           event.target.setPointerCapture(event.pointerId);
           pointerId = event.pointerId;
@@ -387,7 +388,13 @@
     this.addAppListener("MSGestureStart", guestureStartBind);
     this.addAppListener("MSGestureChange", gestureChangeBind);
     this.addAppListener("MSGestureEnd", gestureEndBind);
+    this.addAppListener("MSGestureTap", tapHandlerBind);
     this.addAppListener("pointerdown", handlePointerDown);
+    
+    function tapHandler(event) {
+      this.touchStartTouchList.length = 0;
+      this.trigger("tap", event);
+    }
     
     function guestureStart(event) {
       var touchCopy = this.copyTouch(event);
