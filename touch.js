@@ -139,6 +139,7 @@
     function mousestartHandler(event) {
       var touchCopy = this.copyTouch(event);
       this.touchStartTouchList.push(touchCopy);
+      this.tapStart();
       this.trigger("swipeStart", event);
     }
     
@@ -171,6 +172,12 @@
       }
       this.touchStartTouchList.length = 0;
       
+      if (this.isTapEvent(firstTouchStartEvent, event)) {
+        this.trigger("tap", event);
+        event.preventDefault();
+        return false;
+      }
+
       var touchX = firstTouchStartEvent.clientX,
           nowX = event.clientX,
           touchY = firstTouchStartEvent.clientY,
