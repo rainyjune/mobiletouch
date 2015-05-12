@@ -222,6 +222,7 @@
       // the pointerdown event individually.
       var touchCopy = this.copyTouch(event);
       this.touchStartTouchList.push(touchCopy);
+      this.tapStart();
       this.trigger("swipeStart", event);
     }
     
@@ -260,23 +261,26 @@
       if (idx === -1) {
         return false;
       } else if (idx === 0) {
-        
-        var touchX = firstTouchStartEvent.clientX,
-            nowX = event.clientX,
-            touchY = firstTouchStartEvent.clientY,
-            nowY = event.clientY;
-            
-        var movX = Math.abs(touchX - nowX);
-        var movY = Math.abs(touchY - nowY);
-        
-        if (movX > this.horizontalOffset || movY > this.verticalOffset) {
-          this.trigger("swipe", event);
-          var direction = swipeDirection(touchX, nowX, touchY, nowY);
-          this.trigger("swipe" + direction, event);
+        if (this.isTapEvent(firstTouchStartEvent, event)) {
+          this.trigger("tap", event);
+          event.preventDefault();
         } else {
-          this.trigger("swipeCancel", event);
+          var touchX = firstTouchStartEvent.clientX,
+              nowX = event.clientX,
+              touchY = firstTouchStartEvent.clientY,
+              nowY = event.clientY;
+              
+          var movX = Math.abs(touchX - nowX);
+          var movY = Math.abs(touchY - nowY);
+          
+          if (movX > this.horizontalOffset || movY > this.verticalOffset) {
+            this.trigger("swipe", event);
+            var direction = swipeDirection(touchX, nowX, touchY, nowY);
+            this.trigger("swipe" + direction, event);
+          } else {
+            this.trigger("swipeCancel", event);
+          }
         }
-      
       }
       this.touchStartTouchList.splice(idx, 1);
     }
