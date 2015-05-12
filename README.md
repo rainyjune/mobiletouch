@@ -9,4 +9,4 @@ Supported event names:
   *  swipeUp
   *  swipeDown
   *  swipeCancel
-  *  tap (TODO)
+  *  tap
