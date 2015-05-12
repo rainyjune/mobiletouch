@@ -19,5 +19,6 @@ Tested on
   * iOS 8.3 (iPhone 6 plus)
   * Chrome 42 (Windows 8.1)
   * IE 9 (Windows 7)
+  * IE 10 (Windows 7)
   * IE 11 (Windows 8.1)
   * Firefox 37 (Windows 8.1)
