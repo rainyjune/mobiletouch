@@ -35,7 +35,7 @@
       }
       return false;
     })();
-    
+
     this.__defineGetter__("isTouchFixedNeeded", function() {
       return isTouchFixedNeeded;
     });
@@ -67,6 +67,36 @@
     
     var isTapLength,
         tapLengthTimeout;
+    
+    function tapStart() {
+      isTapLength = true;
+      if (tapLengthTimeout) {
+        clearTimeout(tapLengthTimeout);
+      }
+      tapLengthTimeout = setTimeout(function() {
+        isTapLength = false;	
+      }, 200);
+    }
+
+    this.__defineGetter__("tapStart", function() {
+      return tapStart;
+    });
+
+    function isTapEvent(startTouchPoint, nowTouchPoint) {
+      var startClientX = startTouchPoint.clientX,
+          startClientY = startTouchPoint.clientY,
+          nowClientX = nowTouchPoint.clientX,
+          nowClientY = nowTouchPoint.clientY;
+
+      if (isTapLength && approximatelyEqual(startClientX, nowClientX) && approximatelyEqual(startClientY, nowClientY)) {
+        return true;
+      }
+      return false;
+    }
+
+    this.__defineGetter__("isTapEvent", function() {
+      return isTapEvent;
+    });
     
     /** @access public */
     this.horizontalOffset = 20,
@@ -276,6 +306,7 @@
         var touchCopy = this.copyTouch(touches[i]);
         this.touchStartTouchList.push(touchCopy);
       }
+      this.tapStart();
       this.trigger("swipeStart", event);
     }
     
@@ -317,6 +348,12 @@
       }
     
       var touchEvent = touches[index];
+
+      if (this.isTapEvent(firstTouchStartEvent, touchEvent)) {
+        this.trigger("tap", touchEvent);
+        event.preventDefault();
+        return false;
+      }
     
       var touchX = firstTouchStartEvent.clientX,
           nowX = touchEvent.clientX,
