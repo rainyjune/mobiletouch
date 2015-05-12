@@ -36,33 +36,43 @@
       return false;
     })();
 
-    this.__defineGetter__("isTouchFixedNeeded", function() {
-      return isTouchFixedNeeded;
-    });
-    this.__defineGetter__("touchType", function(){
-      return touchType;
-    });
-    this.__defineSetter__("touchType", function(type){
-      var touchTypes = ["gesture", "pointer", "touch", "mouse"];
-      if (touchTypes.indexOf(type) > -1) {
-        touchType = type;
+    Object.defineProperty(this, "isTouchFixedNeeded", {
+      get: function() {
+        return isTouchFixedNeeded;
       }
     });
-    this.__defineGetter__("touchStartTouchList", function() {
-      return touchStartTouchList;
+    Object.defineProperty(this, "touchType", {
+      get: function() {
+        return touchType;
+      },
+      set: function(type) {
+        var touchTypes = ["gesture", "pointer", "touch", "mouse"];
+        if (touchTypes.indexOf(type) > -1) {
+          touchType = type;
+        }
+      }
     });
-    this.__defineGetter__("elementListeners", function() {
-      return elementListeners;
+    Object.defineProperty(this, "touchStartTouchList", {
+      get: function() {
+        return touchStartTouchList;
+      }
+    });
+    Object.defineProperty(this, "elementListeners", {
+      get: function() {
+        return elementListeners;
+      }
     });
     
-    this.__defineGetter__("addAppListener", function() {
-      return function(type, listener) {
-        this.element.addEventListener(type, listener, false);
-        this.elementListeners.push({
-          "eventName": type,
-          "callback": listener
-        });
-      };
+    Object.defineProperty(this, "addAppListener", {
+      get: function() {
+        return function(type, listener) {
+          this.element.addEventListener(type, listener, false);
+          this.elementListeners.push({
+            "eventName": type,
+            "callback": listener
+          });
+        };
+      }
     });
     
     var isTapLength,
@@ -78,8 +88,10 @@
       }, 200);
     }
 
-    this.__defineGetter__("tapStart", function() {
-      return tapStart;
+    Object.defineProperty(this, "tapStart", {
+      get: function() {
+        return tapStart;
+      }
     });
 
     function isTapEvent(startTouchPoint, nowTouchPoint) {
@@ -94,8 +106,10 @@
       return false;
     }
 
-    this.__defineGetter__("isTapEvent", function() {
-      return isTapEvent;
+    Object.defineProperty(this, "isTapEvent", {
+      get: function() {
+        return isTapEvent;
+      }
     });
     
     /** @access public */
