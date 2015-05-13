@@ -541,11 +541,16 @@
    * @param {function} callback - The function receives a notification when an event of the specified type occurs.
    */
   TouchObject.prototype.addEventListener = function(eventName, callback) {
-    EventsObject.on(eventName, callback);
+    //EventsObject.on(eventName, callback);
+    this.element.addEventListener(eventName, callback);
   }
   
   TouchObject.prototype.trigger = function(eventName, customData) {
-    EventsObject.trigger(eventName, customData);
+    //EventsObject.trigger(eventName, customData);
+    var event = new CustomEvent(eventName, {
+      detail: customData || null
+    });
+    this.element.dispatchEvent(event);
   }
   
   TouchObject.prototype.dispose = function() {
@@ -592,49 +597,6 @@
     return parseFloat(ua.slice(ua.indexOf("Android")+8)).toFixed(1);
   }
   
-  var EventsObject = (function(){
-    // Events on and off
-    var Events = [];
-
-    function on(event, callback) {
-        if (!Events[event]) {
-            Events[event] = [];
-        }
-        Events[event].push(callback);
-        return callback;
-    }
-
-    function off(event, callback) {
-        if (!Events[event]) {
-            return ;
-        }
-        if (callback) {
-            var index = Events[event].indexOf(callback);
-            if (index !== -1) {
-                Events[event].splice(index, 1);
-            }
-        } else {
-            Events[event] = [];
-        }
-    }
-
-    function trigger (event) {
-        if (!Events[event]) {
-            return ;
-        }
-        var args = Array.prototype.slice.call(arguments, 1);
-        var callbackArray = Events[event];
-        for (var i = callbackArray.length - 1; i >= 0; i--) {
-            callbackArray[i].apply(callbackArray[i], args);
-        }
-    }  
-    return {
-      "on": on,
-      "off": off,
-      "trigger": trigger
-    }
-  })();
-  
   // Polyfill for Function.prototype.bind
   // This feature is not supported natively on some platforms, such as Android 2.3.5
   // from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind
@@ -662,6 +624,26 @@
       return fBound;
     };
   }
+  
+  (function () {
+    function CustomEvent ( event, params ) {
+      params = params || { bubbles: true, cancelable: true, detail: undefined };
+      var evt;
+      try{
+        // DOM Level 3 Events support custom event.
+        evt = document.createEvent('CustomEvent');
+        evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+      }catch(e) {
+        // DOM Level 2 Events does not support custom event.
+        evt = document.createEvent('Event');
+        evt.initEvent(event, params.bubbles, params.cancelable);
+        evt.detail = params.detail;
+      }
+      return evt;
+    }
+    CustomEvent.prototype = window.Event.prototype;
+    window.CustomEvent = CustomEvent;  
+  })();
   
   if (typeof define === "function" && (define.amd || define.cmd)) {
     define(function(){
