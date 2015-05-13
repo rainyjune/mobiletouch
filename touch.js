@@ -332,7 +332,7 @@
         this.touchStartTouchList.push(touchCopy);
       }
       this.tapStart();
-      this.trigger("swipeStart", event);
+      this.trigger("swipeStart", touches[0]);
     }
     
     function touchMove(event) {
