@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Flexbox test page</title>
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="new.css" />
+  </head>
+  <body>
+    <div id="testDiv">
+      <ul class="someclass">
+      </ul>
+    </div>
+    <p id="debug"></p>
+    <p>ssss</p>
+    <p>ssss</p>
+    <p>ssss</p>
+    <p>ssss</p>
+    <p>ssss</p>
+    <p>ssss</p>
+    <p>ssss</p>
+    <p>ssss</p>
+    <p>ssss</p>
+    <p>ssss</p>
+    <p>ssss</p>
+    <p>ssss</p><p>ssss</p>
+    <p>ssss</p>
+    <p>ssss</p>
+    <p>ssss</p>
+    
+    <ul style="display: none;" id="slider-item-template">
+      <li>
+        <a href="javascript:void(0);" data-href="#">
+          <h2></h2>
+        </a>
+      </li>
+    </ul>
+    <script src="zepto.min.js"></script>
+    <script src="../../touch.js"></script>
+    <script src="slider.js"></script>
+    <script>
+      $(function(){
+        $("#testDiv").css3Rotator({
+          container: '.someclass',
+          transitionDuration: "0.3s",
+          autoPlay: false,
+          loop: true,
+          dataSource: [
+            {
+              title:'乐进万家A计划走进蒙牛总部', 
+              img: 'images/abf6afa0bb6de81d7abb16923b3_p1_mk1.jpg',
+              link: 'http://m.leju.com/touch/news/c/bj/5984223020636746567.html'
+            },
+            {
+              title: '不愁房租涨首付两万五买房靠谱',
+              img: 'images/d41c8d152cc8554132424b96cd5_p1_mk1.jpg',
+              link: 'http://m.leju.com/touch/news/c/bj/5986396554918146726.html'
+            },
+            {
+              title: '微博家装节:大品牌真实惠',
+              img: 'images/5d117d95c4085399f4f1cef8131_p1_mk1.jpg',
+              link: 'http://weibo.com/p/2307290002_2020'
+            },
+            {
+              title: '“真言2015”之东易日盛陈辉',
+              img: 'images/376c82c0ab4465bdf7d824f1644_p1_mk1.jpg',
+              link: 'http://jiaju.sina.cn/news/20150325/409062.shtml?utm_source=sjleju'
+            },
+            {
+              title: '',
+              img: 'images/f550be82388c12img.jpg',
+              link: 'http://sina.allyes.com/main/c?db=sina&bid=746926,815956,821206&cid=0,0,0&sid=826704&advid=26925&camid=125517&show=ignore&url=http%3A%2F%2Fadm.leju.sina.com.cn%2Fadd_click%2F%3Fsid%3Dcdm_550be84418b24%26url%3Dhttp%253A%252F%252Fbj.house.sina.com.cn%252Fzhuanti%252Fydhkqcmly_g%252Findex.shtml%253Fwt_campaign%253DM_550BE82EB1C5D%2526wt_source%253DPDPS_537023620E5C23'
+            }
+            
+          ]
+        });
+      });
+    </script>
+  </body>
+</html>

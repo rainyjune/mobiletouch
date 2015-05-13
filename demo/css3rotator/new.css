@@ -1,0 +1,204 @@
+/* Reset */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+ul, li {
+  margin: 0;
+  padding: 0;
+}
+      
+/* Library */
+.rotatorRootElement {
+  height: 200px; /* Default height, should be overwritten */
+  position: relative;
+  overflow: hidden;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  
+  -ms-touch-action: none; /* !Imporant for IE 10+. */
+  touch-action: none;
+
+  -webkit-user-select: none;
+}
+
+.rotatorWrapper {
+  background-color: gray;
+  height: 100%;
+  width: 100%; /* Defaults to 100%. This value will be overwritten by JavaScript according to pages count. */
+  -webkit-backface-visibility: hidden; /* Prevent flickering of CSS transitions and transforms in Webkit */
+}
+    
+.flex-it {
+  display: -moz-box; /* OLD - Firefox 19- (buggy but mostly works) */
+  display: -webkit-box;/* OLD - iOS 6-, Safari 3.1-6 */
+  display: -webkit-flex;/* NEW - Chrome */
+  display: -ms-flexbox;/* TWEENER - IE 10 */
+  display: flex;/* NEW, Spec - Opera 12.1, Firefox 20+ */
+  -moz-box-wrap: nowrap;
+  -webkit-box-wrap: nowrap;
+  -webkit-flex-wrap: nowrap;
+  -ms-flexbox-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+}
+    
+/* Not in use */
+.flex-row {
+  -moz-box-direction: row;
+  -webkit-box-direction: row;
+  -webkit-box-orient: horizontal;
+  -webkit-flex-direction: row;
+  -ms-flexbox-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+}
+      
+.rotatorWrapper > * {
+  -webkit-box-flex: 1;      /* OLD - iOS 6-, Safari 3.1-6 */
+  -moz-box-flex: 1;         /* OLD - Firefox 19- */
+  -webkit-flex: 1;          /* Chrome */
+  -ms-flex: 1;              /* IE 10 */
+  flex: 1;                  /* NEW, Spec - Opera 12.1, Firefox 20+ */
+
+  -webkit-flex-basis: 0;
+  flex-basis: 0;
+  -webkit-flex-grow: 1;
+  flex-grow: 1;
+
+  height: 100%;
+  width: 0; /* important! See http://stackoverflow.com/a/7985973 */
+  overflow: hidden;       
+  
+  /* We render each image as a background image */
+  background-size: cover;
+  background-position: center;
+  
+  position: relative; /* Set this value to `relative` so that we can position our headings relatively to each page. */
+}
+
+.rotatorWrapper > * > a {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  -webkit-tap-highlight-color: rgba(0,0,0,0); /* Remove Gray Highlight When Tapping Links */
+  -webkit-user-select: none; /* disable selection/Copy of UIWebView */
+  -webkit-touch-callout: none; /* disable the IOS popup when long-press on a link */
+}
+
+/* We consider the h2 tag as the heading of each page */
+.rotatorWrapper > * > a > h2 {
+  position: absolute;
+  background-color: gray;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  line-height: 20px;
+
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  font-weight: normal;
+  text-indent: 20px;
+}
+      
+.rotatorWrapper > * > img {
+  width:100%;
+  height:auto;
+  max-height:100%;
+}
+      
+.indicator {
+  position: absolute;
+  bottom: 0;
+  right: 5px;
+  height: 20px;
+  font-size: 14px;
+}
+
+.indicator span{
+  display: block;
+  float: left;
+  background: rgba(255,255,255,0.3);
+  width: 7px;
+  height: 7px;
+  margin: 7px 5px 0 0;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  -ms-border-radius: 7px;
+  border-radius: 7px;
+
+  line-height: 20px;
+  font-size: 14px;
+}
+
+.indicator span.current {
+  background-color: #fff;
+}
+
+.notransition {
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -o-transition: none !important;
+  -ms-transition: none !important;
+  transition: none !important;
+}
+
+.duration-initial {
+  -webkit-transition-duration: 0 !important;
+  -moz-transition-duration: 0 !important;
+  -o-transition-duration: 0 !important;
+  transition-duration: 0 !important;
+  
+  -webkit-transition-property: none !important;
+  -moz-transition-property: none !important;
+  -o-transition-property: none !important;
+  transition-property: none !important;
+}
+
+/* Page */
+#testDiv {
+  outline: 1px dotted red;
+}
+
+.left {
+  background-color: orange;
+}
+
+.center {
+  background-color: aqua;
+}
+
+.right {
+  background-image:url("http://src.house.sina.com.cn/imp/imp/deal/7c/94/8/abf6afa0bb6de81d7abb16923b3_p1_mk1.jpg");
+}
+
+.rotatorWrapper {
+  width: 300%;
+}
+
+.someclass {
+  /*
+  -webkit-transform: translateX(-20.33%);
+  transform: translateX(-20.33%);
+  */
+}
+
+#testDiv2 li {
+  outline: 1px solid red;
+}
+
+@media (max-width: 600px) {
+  #testDiv2 li {
+    width: calc(100% - 30px);
+  }
+}
+
+@media (min-width: 600px) {
+  #testDiv2 li {
+    width: calc(100% - 50px);
+  }
+}
+
