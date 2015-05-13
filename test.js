@@ -47,10 +47,10 @@
     });
     
     function printEvent(event) {
-      document.querySelector("#movedX").innerHTML = (event.detail && typeof event.detail.movedPageX !== "undefined") ? parseInt(event.detail.movedPageX) + "px" : "&nbsp;";
-      document.querySelector("#movedY").innerHTML = (event.detail && typeof event.detail.movedPageY !== "undefined") ? parseInt(event.detail.movedPageY) + "px" : "&nbsp;";
-      document.querySelector("#clientX").innerHTML = (typeof event.clientX !== "undefined") ? parseInt(event.clientX) + "px" : "&nbsp;";
-      document.querySelector("#clientY").innerHTML = (typeof event.clientY !== "undefined") ? parseInt(event.clientY) + "px" : "&nbsp;";
+      document.querySelector("#movedX").innerHTML = (event.detail.detail && typeof event.detail.detail.movedPageX !== "undefined") ? parseInt(event.detail.detail.movedPageX) + "px" : "&nbsp;";
+      document.querySelector("#movedY").innerHTML = (event.detail.detail && typeof event.detail.detail.movedPageY !== "undefined") ? parseInt(event.detail.detail.movedPageY) + "px" : "&nbsp;";
+      document.querySelector("#clientX").innerHTML = (typeof event.detail.clientX !== "undefined") ? parseInt(event.detail.clientX) + "px" : "&nbsp;";
+      document.querySelector("#clientY").innerHTML = (typeof event.detail.clientY !== "undefined") ? parseInt(event.detail.clientY) + "px" : "&nbsp;";
     }
     /*
     setTimeout(function(){
