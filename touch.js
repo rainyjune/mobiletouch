@@ -140,6 +140,8 @@
   
   TouchObject.prototype.bindMouseEvents = function() {
     var element = this.element;
+    var startEvent;
+    var swipeTriggered = false;
     
     var mouseStartHandlerBind = mousestartHandler.bind(this);
     var mousemoveHandlerBind = mousemoveHandler.bind(this);
@@ -154,13 +156,18 @@
       var touchCopy = this.copyTouch(event);
       this.touchStartTouchList.push(touchCopy);
       this.tapStart();
-      this.trigger("swipeStart", event);
+      startEvent = event;
+      swipeTriggered = false;
     }
     
     function mousemoveHandler(event) {
       // The 'touch' event not started.
       if (this.touchStartTouchList.length === 0) {
         return false;
+      }
+      if (!swipeTriggered) {
+        this.trigger("swipeStart", startEvent);
+        swipeTriggered = true;
       }
       var firstTouchStartEvent = this.touchStartTouchList[0];
       var nowPageX = event.pageX;
@@ -225,6 +232,9 @@
     var element = this.element,
         elementListeners = this.elementListeners;
         
+    var startEvent;
+    var swipeTriggered = false;
+
     this.addAppListener(pointerDownName, pointerDownBind);
     this.addAppListener(pointerMoveName, pointerMoveBind);
     this.addAppListener(pointerUpName, pointerUpBind);
@@ -237,7 +247,8 @@
       var touchCopy = this.copyTouch(event);
       this.touchStartTouchList.push(touchCopy);
       this.tapStart();
-      this.trigger("swipeStart", event);
+      startEvent = event;
+      swipeTriggered = false;
     }
     
     function pointerMove(event) {
@@ -249,6 +260,10 @@
       // We only handle the first touch point.
       if (firstTouchStartEvent.identifier !== event.pointerId) {
         return false;
+      }
+      if (!swipeTriggered) {
+        this.trigger("swipeStart", startEvent);
+        swipeTriggered = true;
       }
       var nowPageX = event.pageX;
       var nowPageY = event.pageY;
@@ -310,6 +325,9 @@
     var element = this.element,
         elementListeners = this.elementListeners;
         
+    var startEvent;
+    var swipeTriggered = false;
+
     var touchStartBind = touchStart.bind(this),
         touchMoveBind = touchMove.bind(this),
         touchEndBind = touchEnd.bind(this),
@@ -332,7 +350,8 @@
         this.touchStartTouchList.push(touchCopy);
       }
       this.tapStart();
-      this.trigger("swipeStart", touches[0]);
+      startEvent = touches[0];
+      swipeTriggered = false;
     }
     
     function touchMove(event) {
@@ -344,6 +363,11 @@
       var index = ongoingTouchIndexById(firstTouchStartEvent.identifier, touches);
       if (index === -1) {
         return false;
+      }
+      // Dispatch the swipeStart event if needed.
+      if(!swipeTriggered) {
+        this.trigger("swipeStart", startEvent);
+        swipeTriggered = true;
       }
       var touchEvent = touches[index];
       var movedPageX = touchEvent.pageX - firstTouchStartEvent.pageX;
