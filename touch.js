@@ -212,7 +212,9 @@
         var direction = swipeDirection(touchX, nowX, touchY, nowY);
         this.trigger("swipe" + direction, event);
       } else {
-        this.trigger("swipeCancel", event);
+        if (swipeTriggered) {
+          this.trigger("swipeCancel", event);
+        }
       }
     }
   
@@ -307,7 +309,9 @@
             var direction = swipeDirection(touchX, nowX, touchY, nowY);
             this.trigger("swipe" + direction, event);
           } else {
-            this.trigger("swipeCancel", event);
+            if (swipeTriggered) {
+              this.trigger("swipeCancel", event);
+            }
           }
         }
       }
@@ -316,7 +320,9 @@
     
     function pointerCancel(event) {
       this.touchStartTouchList.length = 0;
-      this.trigger("swipeCancel", event);
+      if (swipeTriggered) {
+        this.trigger("swipeCancel", event);
+      }
     }
     
   };
@@ -417,7 +423,9 @@
         var direction = swipeDirection(touchX, nowX, touchY, nowY);
         this.trigger("swipe" + direction, touchEvent);
       } else {
-        this.trigger("swipeCancel", touchEvent);
+        if (swipeTriggered) {
+          this.trigger("swipeCancel", touchEvent);
+        }
       }
     
     }
