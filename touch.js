@@ -337,13 +337,12 @@
     var touchStartBind = touchStart.bind(this),
         touchMoveBind = touchMove.bind(this),
         touchEndBind = touchEnd.bind(this),
-        touchLeaveBind = touchLeave.bind(this),
         touchCancelBind = touchCancel.bind(this);
         
     this.addAppListener("touchstart", touchStartBind);
     this.addAppListener("touchmove", touchMoveBind);
     this.addAppListener("touchend", touchEndBind);
-    this.addAppListener("touchleave", touchLeaveBind);
+    this.addAppListener("touchleave", touchEndBind);
     this.addAppListener("touchcancel", touchCancelBind);
     
     function touchStart(event) {
@@ -430,12 +429,14 @@
     
     }
     
-    function touchLeave(event) {
-      
-    }
-    
     function touchCancel(event) {
-      
+      var touches = event.changedTouches;
+      for (var i = 0, len = touches.length; i < len; i++) {
+        var idx = ongoingTouchIndexById(touches[i].identifier, this.touchStartTouchList);
+        if (idx >= 0) {
+          this.touchStartTouchList.splice(idx, 1);
+        }
+      }
     }
     
   };
