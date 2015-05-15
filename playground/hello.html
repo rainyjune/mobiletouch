@@ -58,17 +58,39 @@
         <tr>
           <th>Event</th><td id="type">&nbsp;</td>
         </tr>
-        <tr>
-          <th>Touches</th><td id="touches">0</td>
-        </tr>
-        <tr>
-          <th>targetTouches</th><td id="targetTouches">0</td>
-        </tr>
-        <tr>
-          <th>changedTouches</th><td id="changedTouches">0</td>
-        </tr>
       </table>
+      <strong>Touches</strong>: <span id="touches">0</span>
+      <div id="touchesInfo">
+      </div>
+      <strong>targetTouches</strong>: <span id="targetTouches">0</span>
+      <div id="targetTouchesInfo">
+      </div>
+      <strong>changedTouches</strong>: <span id="changedTouches">0</span>
+      <div id="changedTouchesInfo">
+      </div>
     </div>
+
+    <div id="touch-template">
+        <table>
+          <tr>
+            <th>identifier</th><td class="identifier"></td>
+            <th>target</th><td class="target"></td>
+          </tr>
+          <tr>
+            <th>screenX</th><td class="screenX"></td>
+            <th>screenY</th><td class="screenY"></td>
+          </tr>
+          <tr>
+            <th>clientX</th><td class="clientX"></td>
+            <th>clientY</th><td class="clientY"></td>
+          </tr>
+          <tr>
+            <th>pageX</th><td class="pageX"></td>
+            <th>pageY</th><td class="pageY"></td>
+          </tr>
+        </table>
+    </div>
+
     <script src="hello.js"></script>
   </body>
 </html>
