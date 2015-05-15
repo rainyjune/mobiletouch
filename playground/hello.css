@@ -26,3 +26,7 @@
 #debug table td {
   text-align: right;
 }
+
+#touch-template {
+  display: none;
+}
