@@ -1,0 +1,28 @@
+#touchable {
+  border: 1px solid blue;
+  background-color: #e0cb52;
+  padding-left: 16px;
+}
+
+#debug {
+  border: 1px dotted red;
+  position: fixed;
+  right: 10px;
+  top: 0;
+  width: 200px;
+  height: 300px;  
+  background-color: gray;
+  color: white;
+}
+
+#debug table {
+  width: 90%;
+  font-size: 12px;
+}
+
+#debug table th {
+  text-align: left;
+}
+#debug table td {
+  text-align: right;
+}
