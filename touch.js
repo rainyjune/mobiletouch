@@ -441,6 +441,11 @@
     
   };
   
+  /**
+   * Copy a touch point.
+   * @param {Touch} touch - An individual touch point.
+   * @return {Object}
+   */
   TouchObject.prototype.copyTouch = function(touch) {
     return {
       "identifier": touch.identifier || touch.pointerId || 0,
