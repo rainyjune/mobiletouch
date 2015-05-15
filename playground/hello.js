@@ -15,10 +15,13 @@ function log(touchEvent) {
   $("#changedTouches").innerHTML = touchEvent.changedTouches.length;
 
   if (touchEvent.touches.length) {
-    var str = generateTouchEventDom(touchEvent.touches[0]).innerHTML;
+    var str = "";
+    for (var i = 0; i < touchEvent.touches.length; i++) {
+      str += generateTouchEventDom(touchEvent.touches[i]).innerHTML;
+    }
     $("#touchesInfo").innerHTML = str;
   } else {
-    $("#touchesInfo").innerHTML = "none";
+    $("#touchesInfo").innerHTML = "";
   }
 }
 
