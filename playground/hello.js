@@ -14,15 +14,10 @@ function log(touchEvent) {
   $("#targetTouches").innerHTML = touchEvent.targetTouches.length;
   $("#changedTouches").innerHTML = touchEvent.changedTouches.length;
 
-  if (touchEvent.touches.length) {
-    var str = "";
-    for (var i = 0; i < touchEvent.touches.length; i++) {
-      str += generateTouchEventDom(touchEvent.touches[i]).innerHTML;
-    }
-    $("#touchesInfo").innerHTML = str;
-  } else {
-    $("#touchesInfo").innerHTML = "";
-  }
+  renderEventList(touchEvent.touches, "#touchesInfo");
+  renderEventList(touchEvent.targetTouches, "#targetTouchesInfo");
+  renderEventList(touchEvent.changedTouches, "#changedTouchesInfo");
+
 }
 
 function $(selector) {
@@ -40,4 +35,16 @@ function generateTouchEventDom(touchEvent) {
   dom.querySelector(".pageX").innerHTML = touchEvent.pageX;
   dom.querySelector(".pageY").innerHTML = touchEvent.pageY;
   return dom;
+}
+
+function renderEventList(touchList, container) {
+  if (touchList.length) {
+    var str = "";
+    for (var i = 0; i < touchList.length; i++) {
+      str += generateTouchEventDom(touchList[i]).innerHTML;
+    }
+    $(container).innerHTML = str;
+  } else {
+    $(container).innerHTML = "";
+  }
 }
