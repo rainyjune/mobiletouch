@@ -197,8 +197,11 @@
       $(window).on("orientationchange", handleOrientationChange);
       var touchObj = new TouchObject(element[0]);
       var domObj = $(element);
-      $(element).on("tap", "a[data-href]", function(){
-        window.location = $(this).attr('data-href');
+      $(element).on("tap",  function(e){
+        var link;
+        if (e.detail && e.detail.target && (link = $(e.detail.target).attr("data-href"))) {
+          window.location = link;
+        }
         return false;
       });
       

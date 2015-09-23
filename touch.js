@@ -404,7 +404,8 @@
       var touchEvent = touches[index];
 
       if (this.isTapEvent(firstTouchStartEvent, touchEvent)) {
-        this.trigger("tap", touchEvent);
+        var touchEventCopy = this.copyTouch(touchEvent);
+        this.trigger("tap", touchEventCopy);
         event.preventDefault();
         return false;
       }
@@ -449,6 +450,7 @@
   TouchObject.prototype.copyTouch = function(touch) {
     return {
       "identifier": touch.identifier || touch.pointerId || 0,
+      "target": touch.target || null,
       "pageX": touch.pageX,
       "pageY": touch.pageY,
       "clientX": touch.clientX,
@@ -666,6 +668,12 @@
   (function () {
     function CustomEvent ( event, params ) {
       params = params || { bubbles: true, cancelable: true, detail: undefined };
+      if (typeof params.bubbles === "undefined") {
+        params.bubbles = true;
+      }
+      if (typeof params.cancelable === "undefined") {
+        params.cancelable = true;
+      }
       var evt;
       try{
         // DOM Level 3 Events support custom event.
