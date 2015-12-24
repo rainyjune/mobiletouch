@@ -113,7 +113,7 @@
     });
     
     /** @access public */
-    this.horizontalOffset = 20,
+    this.horizontalOffset = 20;
     
     /** @access public */
     this.verticalOffset = 30;
